@@ -1,6 +1,6 @@
 # Bataafse Politieke Tijdschriften Browser
 
-A web application for browsing and exploring Dutch historical political journals (Bataafse Politieke Tijdschriften). Built with React and the [KNAW-HUC Panoptes](https://github.com/knaw-huc) framework for digital collection browsing.
+A web application for browsing and exploring Dutch historical political journals (Bataafse Politieke Tijdschriften). Built with React and the [KNAW-HUC Panoptes](https://github.com/knaw-huc/panoptes) framework for digital collection browsing.
 
 ## Tech Stack
 

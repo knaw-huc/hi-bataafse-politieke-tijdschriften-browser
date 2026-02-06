@@ -14,7 +14,7 @@
     "react-dom": "19"
   },
   "dependencies": {
-    "@knaw-huc/panoptes-react": "file:../../IdeaProjects/panoptes-react/knaw-huc-panoptes-react-0.0.1.tgz",
+    "@knaw-huc/panoptes-react": "^0.0.1",
     "@tailwindcss/vite": "^4.1.17",
     "react-markdown": "^10.1.0",
     "rehype-raw": "^7.0.0",

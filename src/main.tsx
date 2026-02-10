@@ -1,5 +1,8 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from '@knaw-huc/panoptes-react';
 import '@knaw-huc/panoptes-react/style.css';
+import './css/politieke-tijdschriften.css';
+import "./i18n/i18n.ts";
+import {createTranslate} from "./i18n/i18n.ts";
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
@@ -17,6 +20,7 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
     searchPath: getVar(panoptesSearchPath),
     detailPath: getVar(panoptesDetailPath),
-    dataset: getVar(panoptesDataset)
+    dataset: getVar(panoptesDataset),
+    translateFn: createTranslate()
 });
 root.render(<PanoptesRouterProvider/>);

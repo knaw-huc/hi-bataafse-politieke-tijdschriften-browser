@@ -7,10 +7,10 @@ A web application for browsing and exploring Dutch historical political journals
 - **React 19** with TypeScript
 - **Vite 7** (build tool and dev server)
 - **Tailwind CSS v4** (styling)
-- **@knaw-huc/faceted-search-react** (faceted search components)
-- **knaw-huc/panoptes** ()
-- **@knaw-huc/panoptes-react** (digital collection browser framework)
-- **react-markdown** with rehype plugins (markdown content rendering)
+- **React-Markdown** with rehype plugins (markdown content rendering, https://remarkjs.github.io/react-markdown/)
+- **@knaw-huc/faceted-search-react** (faceted search components, https://github.com/knaw-huc/faceted-search-react)
+- **@knaw-huc/panoptes-react** (digital collection browser framework, https://github.com/knaw-huc/panoptes-react)
+- **Panoptes-API** (https://github.com/knaw-huc/panoptes)
 
 ## Prerequisites
 

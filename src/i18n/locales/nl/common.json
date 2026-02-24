@@ -22,5 +22,8 @@
   "range.min": "Min",
   "range.max": "Max",
   "results.seeMore": "Zie {{count}} meer reacties",
-  "panoptes.back": "Terug"
+  "panoptes.noValue": "Geen waarde",
+  "panoptes.yes": "Ja",
+  "panoptes.no": "Nee",
+  "panoptes.mainSiteNavigation": "Hoofdnavigatie"
 }

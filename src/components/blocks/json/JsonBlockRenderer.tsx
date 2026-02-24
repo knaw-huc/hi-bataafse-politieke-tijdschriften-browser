@@ -5,7 +5,7 @@ import {
     omitProperty,
 } from "./schemaSelectors.ts";
 import type {JsonBlock, JsonSchema, JsonValue} from "./index.tsx";
-import {type Block, useBlock} from "@knaw-huc/panoptes-react";
+import {type Block, useBlock, usePanoptes} from "@knaw-huc/panoptes-react";
 import GhostLine from "../../ghostline/Ghostline.tsx";
 import classes from "./JsonBlockRenderer.module.css";
 
@@ -41,12 +41,18 @@ const JsonPropertyLabel = ({ label }: { label: string }) => (
 
 /** Renders a primitive value (string/number/boolean/null) */
 const Primitive = ({ value }: { value: JsonValue }) => {
+    const { translateFn } = usePanoptes();
+
     if (value === null || value === "") {
-        return <span className={classes.empty}>—</span>;
+        return <span className={classes.empty}
+                     aria-label={translateFn ? translateFn('panoptes.noValue') : 'No value'}>
+            —
+        </span>;
     }
     switch (typeof value) {
         case "boolean":
-            return <>{value ? "Yes" : "No"}</>;
+            return <>{value ? (translateFn ? translateFn('panoptes.yes') : 'Yes')
+                : (translateFn ? translateFn('panoptes.no') : 'No')}</>;
         case "number":
             return <>{value}</>;
         case "string":

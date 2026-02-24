@@ -4,6 +4,7 @@ import classes from "./Link.module.css";
 
 export interface LinkBlock extends Block {
     type: 'link';
+    value: string;
     url: string;
     model?: Record<string, unknown>;
 }
@@ -18,11 +19,8 @@ export default function LinkBlockRenderer({block}: { block: Block }) {
     }
 
     const link = router.buildLocation({ to: url, params: model }).href
-
     return (
-        <a className={classes.link} href={link}>
-            {typeof value === "string" ? value : String(value)}
-        </a>
+        <a className={classes.link} href={link}>{value}</a>
     );
 
 }

@@ -22,5 +22,8 @@
   "range.min": "Min",
   "range.max": "Max",
   "results.seeMore": "See {{count}} more reactions",
-  "panoptes.back": "Back"
+  "panoptes.yes": "Yes",
+  "panoptes.no": "No",
+  "panoptes.noValue": "No value",
+  "panoptes.mainSiteNavigation": "Main site navigation"
 }

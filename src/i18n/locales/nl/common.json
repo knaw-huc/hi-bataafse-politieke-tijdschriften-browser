@@ -25,5 +25,10 @@
   "panoptes.noValue": "Geen waarde",
   "panoptes.yes": "Ja",
   "panoptes.no": "Nee",
-  "panoptes.mainSiteNavigation": "Hoofdnavigatie"
+  "panoptes.mainSiteNavigation": "Hoofdnavigatie",
+
+  "tijdschrift-detail.titel.label.adjective": "Lidwoord",
+  "tijdschrift-detail.titel.info.adjective": "Lidwoord behorende bij de titel"
+
+
 }

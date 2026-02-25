@@ -1,6 +1,6 @@
 import {type Block, usePanoptes} from "@knaw-huc/panoptes-react";
-import classes from "./Toggle.module.css";
 import {CheckIcon, XMarkIcon} from "@heroicons/react/24/solid";
+import classes from "../Blocks.module.css";
 
 export interface ToggleBlock extends Block {
     type: 'toggle';

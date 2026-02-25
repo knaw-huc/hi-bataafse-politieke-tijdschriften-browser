@@ -25,5 +25,9 @@
   "panoptes.yes": "Yes",
   "panoptes.no": "No",
   "panoptes.noValue": "No value",
-  "panoptes.mainSiteNavigation": "Main site navigation"
+  "panoptes.mainSiteNavigation": "Main site navigation",
+
+  "tijdschrift-detail.titel.label.adjective": "Adjective",
+  "tijdschrift-detail.titel.info.adjective": "Adjective belonging to the title"
+
 }

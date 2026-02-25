@@ -1,12 +1,14 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from '@knaw-huc/panoptes-react';
-import '@knaw-huc/panoptes-react/style.css';
-import './css/politieke-tijdschriften.css';
-import "./i18n/i18n.ts";
 import {createTranslate} from "./i18n/i18n.ts";
 import RenderLink from "./components/blocks/link";
 import RenderMarkdown from "./components/blocks/markdown";
 import JsonBlockRenderer from "./components/blocks/json/JsonBlockRenderer.tsx";
 import RenderToggle from "./components/blocks/toggle";
+import RenderScreenBlock from "./components/blocks/screen";
+import RenderLabel from "./components/blocks/label";
+import '@knaw-huc/panoptes-react/style.css';
+import './css/politieke-tijdschriften.css';
+import "./i18n/i18n.ts";
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
@@ -30,7 +32,9 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
         ["json", JsonBlockRenderer],
         ["link", RenderLink],
         ["markdown", RenderMarkdown],
-        ["toggle", RenderToggle]
+        ["toggle", RenderToggle],
+        ["screen", RenderScreenBlock],
+        ["label", RenderLabel]
     ])
 });
 root.render(<PanoptesRouterProvider/>);

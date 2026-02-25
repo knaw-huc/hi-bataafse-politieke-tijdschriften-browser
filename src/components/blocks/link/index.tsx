@@ -1,6 +1,6 @@
 import {useRouter} from "@tanstack/react-router";
 import type {Block} from "@knaw-huc/panoptes-react";
-import classes from "./Link.module.css";
+import classes from "../Blocks.module.css";
 
 export interface LinkBlock extends Block {
     type: 'link';

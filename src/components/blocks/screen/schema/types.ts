@@ -2,7 +2,7 @@ import type {Block} from "@knaw-huc/panoptes-react";
 
 export interface ScreenDefinition {
     id: string;
-    label: string;
+    label?: string;
     activeTabId?: string;
     screenType: ScreenType;
     tabs: TabDefinition[];
@@ -88,6 +88,8 @@ export interface RowDefinition {
     displayType?: DisplayType;
     label?: string;
     groupId?: string;
+    collapsible?: boolean;
+    defaultCollapsed?: boolean;
     elements?: ElementDefinition[];
     columns?: ColumnDefinition[];
     rows?: RowDefinition[];

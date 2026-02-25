@@ -16,6 +16,8 @@ export default function ScreenRenderer() {
         return translateFn ? translateFn(key) : key;
     };
 
+    const screenLabelKey = screenDefinition.label ?? `screens.${screenDefinition.id}`;
+
     const hasMultipleTabs = screenDefinition.tabs && screenDefinition.tabs.length > 1;
     const hasLinks = screenDefinition.links && screenDefinition.links.length > 0;
     const hasActions = screenDefinition.actions && screenDefinition.actions.length > 0;
@@ -25,7 +27,7 @@ export default function ScreenRenderer() {
         <div className={styles.screen} data-screen-id={screenDefinition.id}>
             {/* Screen header with label */}
             <header className={styles.header}>
-                <h1>{translate(screenDefinition.label)}</h1>
+                <h1>{translate(screenLabelKey)}</h1>
             </header>
 
             {/* Navigation links */}

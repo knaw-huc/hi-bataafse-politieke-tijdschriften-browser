@@ -115,28 +115,37 @@ A `ScreenBlock` received from the API has the following shape:
 
 #### ScreenDefinition
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `id` | `string` | yes | Unique identifier |
-| `label` | `string` | yes | Screen heading (passed through `translateFn`) |
-| `screenType` | `"normal"` | yes | Screen layout variant |
-| `tabs` | `TabDefinition[]` | yes | Tab list; a tab bar is shown only when there are more than one |
-| `activeTabId` | `string` | no | Initially active tab (defaults to first tab) |
-| `links` | `LinkDefinition[]` | no | Navigation links rendered above the tabs |
-| `actions` | `ActionDefinition[]` | no | Action buttons rendered in the footer |
-| `form` | `FormDefinition` | yes | Content form (rows of elements) |
-| `sidebar` | `SidebarDefinition` | no | Icon sidebar rendered to the left of the form |
+| Field | Type | Required | Description                                                                                                  |
+|---|---|---|--------------------------------------------------------------------------------------------------------------|
+| `id` | `string` | yes | Unique identifier                                                                                            |
+| `label` | `string` | no | Screen heading passed through `translateFn`; omit to use the autokey `screens.{id}`                          |
+| `screenType` | `"normal"` | yes | Screen layout variant (not used yet - intended for screen variants, eg., mobile, in a popover, confirmation) |
+| `tabs` | `TabDefinition[]` | yes | Tab list; a tab bar is shown only when there are more than one                                               |
+| `activeTabId` | `string` | no | Initially active tab (defaults to first tab)                                                                 |
+| `links` | `LinkDefinition[]` | no | Navigation links rendered above the tabs                                                                     |
+| `actions` | `ActionDefinition[]` | no | Action buttons rendered in the footer                                                                        |
+| `form` | `FormDefinition` | yes | Content form (rows of elements)                                                                              |
+| `sidebar` | `SidebarDefinition` | no | Icon sidebar rendered to the left of the form                                                                |
 
-#### TabDefinition
+#### TabDefinition (not used yet)
 
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `id` | `string` | yes | Unique tab identifier |
-| `label` | `string` | yes | Tab label |
+Tabs are .... tabs, and meant for executing an operation after clicking a tab. 
+
+| Field | Type | Required | Description                                                  |
+|---|---|---|--------------------------------------------------------------|
+| `id` | `string` | yes | Unique tab identifier                                        |
+| `label` | `string` | yes | Tab label                                                    |
 | `operation` | `OperationDefinition` | no | API operation to call when the tab is selected |
-| `operationList` | `OperationListItem[]` | no | Sub-navigation items shown beneath the active tab |
+| `operationList` | `OperationListItem[]` | no | Sub-navigation items shown beneath the active tab            |
 
-#### LinkDefinition
+#### LinkDefinition (not used yet)
+
+Links are intended to be 'follow-up' operations after fetching data. For example, we could envision the flow as follows:
+
+- Fetch item data
+- Link -> Fetch screen definition
+- Link -> Fetch translations
+- Link -> Fetch data from remote system
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -145,7 +154,9 @@ A `ScreenBlock` received from the API has the following shape:
 | `operation` | `OperationDefinition` | no | API operation to execute on click |
 | `href` | `string` | no | URL to navigate to on click |
 
-#### ActionDefinition
+#### ActionDefinition (not used yet)
+
+Actions are meant to be simple API operations, executed after action button clicks.
 
 | Field | Type | Required | Description |
 |---|---|---|---|
@@ -180,7 +191,7 @@ A `ScreenBlock` received from the API has the following shape:
 | Field | Type | Description |
 |---|---|---|
 | `displayType` | `"header" \| "group" \| "footer" \| "row"` | Styling variant (default: `"row"`) |
-| `label` | `string` | Optional fieldset legend |
+| `label` | `string` | Optional fieldset legend; omit to use the autokey `screens.{screenId}.{groupId}` (requires `groupId`) |
 | `groupId` | `string` | Used as the React key and `data-group-id` attribute |
 | `elements` | `ElementDefinition[]` | Direct child elements (mutually exclusive with `columns`/`rows`) |
 | `columns` | `ColumnDefinition[]` | Multi-column layout; each column holds its own elements |
@@ -194,8 +205,8 @@ Row content is resolved in order of priority: nested `rows` → `columns` → `e
 |---|---|---|
 | `value` | `string` | Binding expression (see [Bindings](#bindings)) |
 | `type` | `string` | Element type (see [Element types](#element-types)); inferred from data when omitted |
-| `label` | `string` | Field label rendered above the element |
-| `infoLabel` | `string` | Secondary info text rendered below the element |
+| `label` | `string` | Field label rendered above the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}` |
+| `infoLabel` | `string` | Secondary info text rendered below the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}.info` |
 | `hidden` | `boolean` | Hides the element when `true` |
 | `config` | `object` | Type-specific configuration (e.g. `options` for `select`, `itemTemplate` for `array`) |
 
@@ -220,7 +231,25 @@ Element `value` fields and `itemTemplate` field values use binding expressions t
 
 Path segments are separated by `/`.
 
+### Autokey label generation
+
+All `label` (and `infoLabel`) fields are optional. When omitted, a translation key is derived automatically and passed through `translateFn`. The keys follow a hierarchical pattern based on the screen ID, group ID, and field path:
+
+| Context | Autokey pattern | Example |
+|---|---|---|
+| Screen heading | `screens.{screenId}` | `screens.journal-detail` |
+| Group legend | `screens.{screenId}.{groupId}` | `screens.journal-detail.metadata` |
+| Element label | `screens.{screenId}.{groupId}.{field}` | `screens.journal-detail.metadata.title` |
+| Element info label | `screens.{screenId}.{groupId}.{field}.info` | `screens.journal-detail.metadata.title.info` |
+
+The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`.
+
+When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
+
 ### Element types
+
+The element type can be an unspecified type, or a type present in the collection of
+Panoptes-known blocks (list, cmdi) and/or application-specific custom blocks.
 
 When `type` is not specified on an `ElementDefinition` the type is inferred from the resolved value:
 
@@ -248,35 +277,289 @@ Explicit types available:
 
 Any `type` that matches a registered Panoptes block is rendered using that block component. If no matching block is found (or the block component throws), the element falls back to the native HTML renderer above.
 
-### Example
+### Example of a full screen definition
 
 ```jsonc
 {
-  "type": "screen",
-  "value": {
-    "title": "De Politieke Blixem",
-    "year": 1801,
-    "tags": ["satire", "politics"]
+  "id": "tijdschrift-detail",
+  "screenType": "normal",
+  "globals": {
   },
-  "config": {
-    "id": "journal-detail",
-    "label": "Journal",
-    "screenType": "normal",
-    "tabs": [{ "id": "main", "label": "Details" }],
-    "actions": [],
-    "form": {
-      "rows": [
-        {
-          "displayType": "group",
-          "label": "Metadata",
-          "elements": [
-            { "value": "$data#/title", "label": "Title" },
-            { "value": "$data#/year",  "label": "Year" },
-            { "value": "$data#/tags",  "label": "Tags", "type": "array" }
-          ]
-        }
-      ]
+  "tabs": [
+    {
+      "id": "algemeen",
+      "label": "Algemeen"
     }
+  ],
+  "links": [
+  ],
+  "actions": [
+  ],
+  "sidebar": {
+    "id": "tijdschrift-sidebar",
+    "sections": [
+      {
+        "id": "main",
+        "items": [
+          {
+            "id": "tijdschriften",
+            "icon": "newspaper",
+            "label": "tijdschrift-detail.tijdschrift-sidebar.label.publications"
+          }
+        ]
+      },
+      {
+        "id": "util",
+        "items": [
+          {
+            "id": "instellingen",
+            "icon": "settings",
+            "label": "tijdschrift-detail.tijdschrift-sidebar.label.settings"
+          }
+        ]
+      }
+    ]
+  },
+  "form": {
+    "rows": [
+      {
+        "displayType": "group",
+        "groupId": "titel",
+        "columns": [
+          {
+            "elements": [
+              {
+                "value": "$data#/lidwoordTitel",
+                "type": "label"
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "value": "$data#/titelVanTijdschrift",
+                "type": "label"
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "value": "$data#/onderTitel",
+                "type": "label"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "publicatie",
+        "rows": [
+          {
+            "columns": [
+              {
+                "elements": [
+                  {
+                    "value": "$data#/uitgever",
+                    "type": "link",
+                    "config": {
+                      "url": "/politieke-tijdschriften-uitgever_drukker/details/$uitgeverId"
+                    }
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/drukker",
+                    "type": "link",
+                    "config": {
+                      "url": "/politieke-tijdschriften-uitgever_drukker/details/$drukkerId"
+                    }
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/plaats",
+                    "type": "link",
+                    "config": {
+                      "url": "/politieke-tijdschriften-plaatsnaam/details/$plaatsId"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "columns": [
+              {
+                "elements": [
+                  {
+                    "value": "$data#/uitgeverZeker",
+                    "type": "toggle"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/drukkerZeker",
+                    "type": "toggle"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/nietBewaard",
+                    "type": "toggle"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/vrijheidGelijkheidBroederschap",
+                    "type": "toggle"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "periode",
+        "rows": [
+          {
+            "columns": [
+              {
+                "elements": [
+                  {
+                    "value": "$data#/eersteNummer",
+                    "type": "label"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/laatsteNummer",
+                    "type": "label"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/prijsDuiten",
+                    "type": "label"
+                  }
+                ]
+              },
+              {
+                "elements": [
+                  {
+                    "value": "$data#/afleveringen",
+                    "type": "label"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "value": "$data#/formaat",
+                "type": "label"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "classificatie",
+        "columns": [
+          {
+            "elements": [
+              {
+                "value": "$data#/vormTijdschrift",
+                "type": "label"
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "value": "$data#/typeTijdschrift",
+                "type": "label"
+              }
+            ]
+          },
+          {
+            "elements": [
+              {
+                "value": "$data#/politiekePositie",
+                "type": "label"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "inhoud",
+        "elements": [
+          {
+            "value": "$data#/korteOmschrijvingInhoud",
+            "type": "markdown",
+            "config": {
+            }
+          },
+          {
+            "value": "$data#/verantwoordingSelectie",
+            "type": "markdown",
+            "config": {
+            }
+          },
+          {
+            "value": "$data#/toelichtingRedacteurAuteur",
+            "type": "markdown",
+            "config": {
+            }
+          },
+          {
+            "value": "$data#/advertenties_en_andere_verwijsplaatsen",
+            "type": "markdown"
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "aanvullende-titels",
+        "elements": [
+          {
+            "value": "$data#/aanvullendeTitels",
+            "type": "list"
+          }
+        ]
+      },
+      {
+        "displayType": "group",
+        "groupId": "artikel-types",
+        "elements": [
+          {
+            "value": "$data#/artikelType",
+            "type": "list"
+          }
+        ]
+      }
+    ]
   }
 }
 ```

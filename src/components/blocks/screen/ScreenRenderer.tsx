@@ -44,7 +44,7 @@ export default function ScreenRenderer() {
                 </nav>
             )}
 
-            {/* Body: main form content + optional sidebar */}
+            {/* Main form content + optional sidebar */}
             <div className={hasSidebar ? styles.bodyWithSidebar : styles.body}
                  style={hasSidebar && screenDefinition.sidebar!.width
                      ? { '--sidebar-width': screenDefinition.sidebar!.width } as React.CSSProperties

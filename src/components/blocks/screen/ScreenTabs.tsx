@@ -18,6 +18,7 @@ export default function ScreenTabs() {
             {tabs.map((tab) => {
                 const isActive = tab.id === activeTabId;
                 const hasSubItems = tab.operationList && tab.operationList.length > 0;
+                const autoTabKey = `screens.${screenDefinition.id}.tabs.${tab.id}`;
 
                 return (
                     <li key={tab.id}
@@ -29,7 +30,7 @@ export default function ScreenTabs() {
                             aria-controls={`panel-${tab.id}`}
                             onClick={() => setActiveTabId(tab.id)}
                             className={styles.tabButton}>
-                            {translate(tab.label)}
+                            {translate(tab.label ?? autoTabKey)}
                         </button>
 
                         {/* Sub-navigation for operationList */}
@@ -43,7 +44,7 @@ export default function ScreenTabs() {
                                                 // TODO: Load data via operation
                                                 console.log('Load operation:', item.operation);
                                             }}>
-                                            {translate(item.label)}
+                                            {translate(item.label ?? `${autoTabKey}.${item.id}`)}
                                         </button>
                                     </li>
                                 ))}

@@ -26,7 +26,7 @@ export interface SidebarSectionDefinition {
 export interface SidebarNavItemDefinition {
     id: string;
     icon: string;
-    label: string;
+    label?: string;
     operation: OperationDefinition;
     active?: boolean;
 }
@@ -35,14 +35,14 @@ export type ScreenType = 'normal';
 
 export interface TabDefinition {
     id: string;
-    label: string;
+    label?: string;
     operation?: OperationDefinition;
     operationList?: OperationListItem[];
 }
 
 export interface OperationListItem {
     id: string;
-    label: string;
+    label?: string;
     operation: OperationDefinition;
 }
 
@@ -60,7 +60,7 @@ export interface LinkDefinition {
 
 export interface ActionDefinition {
     id: string;
-    label: string;
+    label?: string;
     activate: ActivationType;
     confirmation: ConfirmationDefinition;
     operation: OperationDefinition;

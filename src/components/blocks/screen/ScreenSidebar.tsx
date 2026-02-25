@@ -4,6 +4,7 @@ import type {LucideProps} from 'lucide-react';
 import type {SidebarDefinition, SidebarNavItemDefinition} from './schema';
 import styles from './ScreenSidebar.module.css';
 import {usePanoptes} from "@knaw-huc/panoptes-react";
+import useScreenContext from "./hooks/useScreenContext.ts";
 
 interface ScreenSidebarProps {
     sidebar: SidebarDefinition;
@@ -18,29 +19,33 @@ function NavIcon({ name }: { name: string }) {
     return <Icon size={20} strokeWidth={1.5} />;
 }
 
-function NavItem({ item }: { item: SidebarNavItemDefinition }) {
+function NavItem({ item, screenId, sectionId }: { item: SidebarNavItemDefinition; screenId: string; sectionId: string }) {
     const { translateFn } = usePanoptes();
 
+    const autoLabelKey = `screens.${screenId}.sidebar.${sectionId}.${item.id}`;
+    const labelKey = item.label ?? autoLabelKey;
+    const label = translateFn ? translateFn(labelKey) : labelKey;
+
     const className = `${styles.item}${item.active ? ` ${styles.itemActive}` : ''}`;
-    const content = (
-        <>
+
+    return (
+        <button type="button" className={className} title={label}>
             <NavIcon name={item.icon} />
-            <span className={styles.tooltip}>{translateFn ? translateFn(item.label) : item.label}</span>
-        </>
+            <span className={styles.tooltip}>{label}</span>
+        </button>
     );
-
-
-    return <button type="button" className={className} title={item.label}>{content}</button>;
 }
 
 export default function ScreenSidebar({ sidebar }: ScreenSidebarProps) {
+    const { screenDefinition } = useScreenContext();
+
     return (
         <aside className={styles.sidebar} data-sidebar-id={sidebar.id}>
             {sidebar.sections.map((section, index) => (
                 <div key={section.id} className={styles.section}>
                     {index > 0 && <hr className={styles.divider} />}
                     {section.items.map(item => (
-                        <NavItem key={item.id} item={item} />
+                        <NavItem key={item.id} item={item} screenId={screenDefinition.id} sectionId={section.id} />
                     ))}
                 </div>
             ))}

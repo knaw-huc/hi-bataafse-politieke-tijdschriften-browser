@@ -27,7 +27,7 @@ interface ActionButtonProps {
 }
 
 function ActionButton({ action }: ActionButtonProps) {
-    const { data } = useScreenContext();
+    const { screenDefinition, data } = useScreenContext();
     const { translateFn } = usePanoptes();
     const translate = (key: string): string => translateFn ? translateFn(key) : key;
 
@@ -63,6 +63,7 @@ function ActionButton({ action }: ActionButtonProps) {
         setShowConfirmation(false);
     }, []);
 
+    const autoKey = `screens.${screenDefinition.id}.actions.${action.id}`;
     const labels = action.confirmation.labels;
 
     return (
@@ -72,32 +73,28 @@ function ActionButton({ action }: ActionButtonProps) {
                 onClick={handleClick}
                 disabled={isExecuting}
                 data-action-id={action.id}>
-                {isExecuting ? '...' : translate(action.label)}
+                {isExecuting ? '...' : translate(action.label ?? autoKey)}
             </button>
 
             {showConfirmation && (
                 <div className={styles.confirmationOverlay}>
                     <div className={styles.confirmationDialog} role="dialog" aria-modal="true">
-                        {labels?.title && (
-                            <h2 className={styles.confirmationTitle}>
-                                {translate(labels.title)}
-                            </h2>
-                        )}
-                        {labels?.message && (
-                            <p className={styles.confirmationMessage}>
-                                {translate(labels.message)}
-                            </p>
-                        )}
+                        <h2 className={styles.confirmationTitle}>
+                            {translate(labels?.title ?? `${autoKey}.title`)}
+                        </h2>
+                        <p className={styles.confirmationMessage}>
+                            {translate(labels?.message ?? `${autoKey}.message`)}
+                        </p>
                         <div className={styles.confirmationActions}>
                             <button
                                 className={styles.confirmationCancel}
                                 onClick={handleCancel}>
-                                {labels?.cancel ? translate(labels.cancel) : 'Cancel'}
+                                {translate(labels?.cancel ?? `${autoKey}.cancel`)}
                             </button>
                             <button
                                 className={styles.confirmationOk}
                                 onClick={handleConfirm}>
-                                {labels?.ok ? translate(labels.ok) : 'OK'}
+                                {translate(labels?.ok ?? `${autoKey}.ok`)}
                             </button>
                         </div>
                     </div>

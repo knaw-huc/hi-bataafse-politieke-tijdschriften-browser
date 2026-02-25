@@ -82,7 +82,9 @@
   "screens.tijdschrift-detail.aanvullende-titels.aanvullendeTitels.info": "",
   "screens.tijdschrift-detail.artikel-types": "Artikeltype(n)",
   "screens.tijdschrift-detail.artikel-types.artikelType": "",
-  "screens.tijdschrift-detail.artikel-types.artikelType.info": ""
+  "screens.tijdschrift-detail.artikel-types.artikelType.info": "",
 
+  "screens.tijdschrift-detail.sidebar.main.tijdschriften": "Tijdschriften",
+  "screens.tijdschrift-detail.sidebar.util.instellingen": "Instellingen"
 
 }

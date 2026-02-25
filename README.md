@@ -129,14 +129,16 @@ A `ScreenBlock` received from the API has the following shape:
 
 #### TabDefinition (not used yet)
 
-Tabs are .... tabs, and meant for executing an operation after clicking a tab. 
+Tabs are .... tabs, and meant for executing an operation after clicking a tab.
 
 | Field | Type | Required | Description                                                  |
 |---|---|---|--------------------------------------------------------------|
 | `id` | `string` | yes | Unique tab identifier                                        |
-| `label` | `string` | yes | Tab label                                                    |
+| `label` | `string` | no | Tab label; omit to use the autokey `screens.{screenId}.tabs.{tabId}` |
 | `operation` | `OperationDefinition` | no | API operation to call when the tab is selected |
 | `operationList` | `OperationListItem[]` | no | Sub-navigation items shown beneath the active tab            |
+
+Each `OperationListItem` has an `id`, an optional `label` (autokey: `screens.{screenId}.tabs.{tabId}.{itemId}`), and an `operation`.
 
 #### LinkDefinition (not used yet)
 
@@ -161,7 +163,7 @@ Actions are meant to be simple API operations, executed after action button clic
 | Field | Type | Required | Description |
 |---|---|---|---|
 | `id` | `string` | yes | Unique action identifier |
-| `label` | `string` | yes | Button label |
+| `label` | `string` | no | Button label; omit to use the autokey `screens.{screenId}.actions.{actionId}` |
 | `activate` | `"always" \| "onDirty" \| "onValid" \| "onDirtyAndValid"` | yes | When the button is enabled |
 | `confirmation` | `ConfirmationDefinition` | yes | Confirmation dialog settings |
 | `operation` | `OperationDefinition` | yes | API operation to call on confirm |
@@ -171,10 +173,10 @@ Actions are meant to be simple API operations, executed after action button clic
 | Field | Type | Description |
 |---|---|---|
 | `askConfirmation` | `"always" \| "never" \| "onDirty"` | When to show a confirmation dialog |
-| `labels.title` | `string` | Dialog title |
-| `labels.message` | `string` | Dialog message |
-| `labels.ok` | `string` | Confirm button label (default: `"OK"`) |
-| `labels.cancel` | `string` | Cancel button label (default: `"Cancel"`) |
+| `labels.title` | `string` | Dialog title; omit to use the autokey `screens.{screenId}.actions.{actionId}.title` |
+| `labels.message` | `string` | Dialog message; omit to use the autokey `screens.{screenId}.actions.{actionId}.message` |
+| `labels.ok` | `string` | Confirm button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.ok` |
+| `labels.cancel` | `string` | Cancel button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.cancel` |
 
 #### FormDefinition and rows
 
@@ -218,7 +220,7 @@ Row content is resolved in order of priority: nested `rows` → `columns` → `e
 | `width` | `string` | Optional CSS width for the sidebar (sets `--sidebar-width`) |
 | `sections` | `SidebarSectionDefinition[]` | Groups of navigation items separated by a divider |
 
-Each `SidebarNavItemDefinition` has an `icon` (Lucide icon name in kebab-case, e.g. `"book-open"`), a `label`, an `operation`, and an optional `active` flag.
+Each `SidebarNavItemDefinition` has an `icon` (Lucide icon name in kebab-case, e.g. `"book-open"`), an optional `label` (autokey: `screens.{screenId}.sidebar.{sectionId}.{itemId}`), an `operation`, and an optional `active` flag.
 
 ### Bindings
 
@@ -241,6 +243,14 @@ All `label` (and `infoLabel`) fields are optional. When omitted, a translation k
 | Group legend | `screens.{screenId}.{groupId}` | `screens.journal-detail.metadata` |
 | Element label | `screens.{screenId}.{groupId}.{field}` | `screens.journal-detail.metadata.title` |
 | Element info label | `screens.{screenId}.{groupId}.{field}.info` | `screens.journal-detail.metadata.title.info` |
+| Tab label | `screens.{screenId}.tabs.{tabId}` | `screens.journal-detail.tabs.general` |
+| Tab operation list item | `screens.{screenId}.tabs.{tabId}.{itemId}` | `screens.journal-detail.tabs.general.volume-1` |
+| Sidebar nav item | `screens.{screenId}.sidebar.{sectionId}.{itemId}` | `screens.journal-detail.sidebar.main.home` |
+| Action button | `screens.{screenId}.actions.{actionId}` | `screens.journal-detail.actions.save` |
+| Action confirmation title | `screens.{screenId}.actions.{actionId}.title` | `screens.journal-detail.actions.save.title` |
+| Action confirmation message | `screens.{screenId}.actions.{actionId}.message` | `screens.journal-detail.actions.save.message` |
+| Action confirmation ok | `screens.{screenId}.actions.{actionId}.ok` | `screens.journal-detail.actions.save.ok` |
+| Action confirmation cancel | `screens.{screenId}.actions.{actionId}.cancel` | `screens.journal-detail.actions.save.cancel` |
 
 The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`.
 

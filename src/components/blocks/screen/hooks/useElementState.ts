@@ -24,12 +24,18 @@ export default function useElementState(element: ElementDefinition, groupId?: st
         return getValue(expression);
     };
 
-    const autoLabelKey = isBindingExpression(element.value)
+    const autoLabelKey = typeof element.value === 'string' && isBindingExpression(element.value)
         ? buildLabelKey(screenDefinition.id, groupId, parseBinding(element.value).path)
         : undefined;
 
+    const resolvedValue = Array.isArray(element.value)
+        ? element.value.map(resolveValue)
+        : typeof element.value === 'object' && element.value !== null
+            ? Object.fromEntries(Object.entries(element.value).map(([k, v]) => [k, resolveValue(v)]))
+            : resolveValue(element.value);
+
     return {
-        value: resolveValue(element.value),
+        value: resolvedValue,
         hidden: element.hidden ?? false,
         label: element.label ?? autoLabelKey,
         infoLabel: element.infoLabel ?? (autoLabelKey ? `${autoLabelKey}.info` : undefined),

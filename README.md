@@ -116,16 +116,16 @@ A `ScreenBlock` received from the API has the following shape:
 #### ScreenDefinition
 
 | Field | Type | Required | Description                                                                                                  |
-|---|---|---|--------------------------------------------------------------------------------------------------------------|
-| `id` | `string` | yes | Unique identifier                                                                                            |
-| `label` | `string` | no | Screen heading passed through `translateFn`; omit to use the autokey `screens.{id}`                          |
-| `screenType` | `"normal"` | yes | Screen layout variant (not used yet - intended for screen variants, eg., mobile, in a popover, confirmation) |
-| `tabs` | `TabDefinition[]` | yes | Tab list; a tab bar is shown only when there are more than one                                               |
-| `activeTabId` | `string` | no | Initially active tab (defaults to first tab)                                                                 |
-| `links` | `LinkDefinition[]` | no | Navigation links rendered above the tabs                                                                     |
-| `actions` | `ActionDefinition[]` | no | Action buttons rendered in the footer                                                                        |
-| `form` | `FormDefinition` | yes | Content form (rows of elements)                                                                              |
-| `sidebar` | `SidebarDefinition` | no | Icon sidebar rendered to the left of the form                                                                |
+|---|---|----------|--------------------------------------------------------------------------------------------------------------|
+| `id` | `string` | yes      | Unique identifier                                                                                            |
+| `label` | `string` | no       | Screen heading passed through `translateFn`; omit to use the autokey `screens.{id}`                          |
+| `screenType` | `"normal"` | yes      | Screen layout variant (not used yet - intended for screen variants, eg., mobile, in a popover, confirmation) |
+| `tabs` | `TabDefinition[]` | no       | Tab list; a tab bar is shown only when there are more than one                                               |
+| `activeTabId` | `string` | no       | Initially active tab (defaults to first tab)                                                                 |
+| `links` | `LinkDefinition[]` | no       | Navigation links rendered above the tabs                                                                     |
+| `actions` | `ActionDefinition[]` | no       | Action buttons rendered in the footer                                                                        |
+| `form` | `FormDefinition` | yes      | Content form (rows of elements)                                                                              |
+| `sidebar` | `SidebarDefinition` | no       | Icon sidebar rendered to the left of the form                                                                |
 
 #### TabDefinition (not used yet)
 
@@ -205,10 +205,10 @@ Row content is resolved in order of priority: nested `rows` → `columns` → `e
 
 | Field | Type | Description |
 |---|---|---|
-| `value` | `string` | Binding expression (see [Bindings](#bindings)) |
+| `value` | `string \| string[] \| Record<string, string>` | Binding expression(s) — see [Bindings](#bindings) |
 | `type` | `string` | Element type (see [Element types](#element-types)); inferred from data when omitted |
-| `label` | `string` | Field label rendered above the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}` |
-| `infoLabel` | `string` | Secondary info text rendered below the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}.info` |
+| `label` | `string` | Field label rendered above the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}` (only available for single-string `value`) |
+| `infoLabel` | `string` | Secondary info text rendered below the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}.info` (only available for single-string `value`) |
 | `hidden` | `boolean` | Hides the element when `true` |
 | `config` | `object` | Type-specific configuration (e.g. `options` for `select`, `itemTemplate` for `array`) |
 
@@ -232,6 +232,30 @@ Element `value` fields and `itemTemplate` field values use binding expressions t
 | `$itemData#/field` | The current item object when rendering inside an `array` element |
 
 Path segments are separated by `/`.
+
+The `value` field on an `ElementDefinition` supports three forms:
+
+**Single string** — resolves to a single value and enables autokey label generation:
+```jsonc
+{ "value": "$data#/title", "type": "text" }
+```
+
+**Array of strings** — each binding is resolved independently; the block receives an array of resolved values. Useful for blocks that combine multiple data fields:
+```jsonc
+{ "value": ["$data#/firstName", "$data#/lastName"], "type": "full-name" }
+```
+
+**Object with string values** — each property's binding expression is resolved independently; the block receives a plain object with the resolved values. Useful for blocks that need named inputs (e.g. a map block needing separate latitude/longitude fields). No autokey is generated in this form:
+```jsonc
+{
+  "value": {
+    "latitude": "$data#/plaatsBreedtegraad",
+    "longitude": "$data#/plaatsLengtegraad"
+  },
+  "type": "map",
+  "config": { "zoom": 6 }
+}
+```
 
 ### Autokey label generation
 
@@ -296,10 +320,6 @@ Any `type` that matches a registered Panoptes block is rendered using that block
   "globals": {
   },
   "tabs": [
-    {
-      "id": "algemeen",
-      "label": "Algemeen"
-    }
   ],
   "links": [
   ],

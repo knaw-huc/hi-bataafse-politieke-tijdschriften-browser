@@ -3,6 +3,7 @@ import {createTranslate} from "./i18n/i18n.ts";
 import RenderLink from "./components/blocks/link";
 import RenderMarkdown from "./components/blocks/markdown";
 import JsonBlockRenderer from "./components/blocks/json/JsonBlockRenderer.tsx";
+import MapBlockRenderer from "./components/blocks/map";
 import RenderToggle from "./components/blocks/toggle";
 import RenderScreenBlock from "./components/blocks/screen";
 import RenderLabel from "./components/blocks/label";
@@ -34,7 +35,8 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
         ["markdown", RenderMarkdown],
         ["toggle", RenderToggle],
         ["screen", RenderScreenBlock],
-        ["label", RenderLabel]
+        ["label", RenderLabel],
+        ["map", MapBlockRenderer]
     ])
 });
 root.render(<PanoptesRouterProvider/>);

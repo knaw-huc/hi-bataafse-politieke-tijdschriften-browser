@@ -9,13 +9,13 @@ export default function ScreenTabs() {
 
     const { tabs } = screenDefinition;
 
-    if (tabs.length <= 1) {
+    if (!tabs || tabs.length <= 1) {
         return null;
     }
 
     return (
         <ul className={styles.tabs} role="tablist">
-            {tabs.map((tab) => {
+            {tabs && tabs.map((tab) => {
                 const isActive = tab.id === activeTabId;
                 const hasSubItems = tab.operationList && tab.operationList.length > 0;
                 const autoTabKey = `screens.${screenDefinition.id}.tabs.${tab.id}`;

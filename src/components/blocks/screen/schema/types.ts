@@ -5,7 +5,7 @@ export interface ScreenDefinition {
     label?: string;
     activeTabId?: string;
     screenType: ScreenType;
-    tabs: TabDefinition[];
+    tabs?: TabDefinition[];
     links?: LinkDefinition[];
     actions: ActionDefinition[];
     form: FormDefinition;
@@ -102,7 +102,7 @@ export interface ColumnDefinition {
 }
 
 export interface ElementDefinition {
-    value: string;
+    value: string | string[] | Record<string, string>;
     hidden?: boolean;
     addIndeterminate?: boolean;
     label?: string;

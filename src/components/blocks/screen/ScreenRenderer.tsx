@@ -12,8 +12,8 @@ export default function ScreenRenderer() {
     const { screenDefinition } = useScreenContext();
     const { translateFn } = usePanoptes();
 
-    const translate = (key: string): string => {
-        return translateFn ? translateFn(key) : key;
+    const translate = (key: string, opts: Record<string, unknown> = {}): string => {
+        return translateFn ? translateFn(key, opts) : key;
     };
 
     const screenLabelKey = screenDefinition.label ?? `screens.${screenDefinition.id}`;

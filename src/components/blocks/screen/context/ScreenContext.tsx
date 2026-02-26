@@ -19,7 +19,7 @@ export interface ScreenProviderProps {
 export function ScreenProvider({ screenDefinition, data, children }: ScreenProviderProps) {
     const [activeTabId, setActiveTabId] = useReducer(
         (_: string, newTabId: string) => newTabId,
-        screenDefinition.activeTabId || screenDefinition.tabs[0]?.id || ''
+        screenDefinition.activeTabId || screenDefinition.tabs?.[0]?.id || ''
     );
 
     const contextValue = useMemo<ScreenContextValue>(() => ({

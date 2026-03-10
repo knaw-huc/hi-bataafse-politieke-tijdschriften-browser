@@ -1,6 +1,7 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from '@knaw-huc/panoptes-react';
 import {createTranslate} from "./i18n/i18n.ts";
 import RenderLink from "./components/blocks/link";
+import RenderExternalLink from "./components/blocks/external-link";
 import RenderMarkdown from "./components/blocks/markdown";
 import JsonBlockRenderer from "./components/blocks/json/JsonBlockRenderer.tsx";
 import MapBlockRenderer from "./components/blocks/map";
@@ -22,6 +23,13 @@ const getVar = (envVariable: string): string | undefined =>
         ? (envVariable.slice(1) in import.meta.env ? import.meta.env[envVariable.slice(1)] : undefined)
         : envVariable;
 
+if (window.location.pathname === '/') {
+    const dataset = getVar(panoptesDataset);
+    const searchPath = getVar(panoptesSearchPath);
+    const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
+    window.location.replace(target);
+}
+
 const root = createPanoptesRoot(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
@@ -32,6 +40,7 @@ const root = createPanoptesRoot(document.getElementById('root')!, {
     blocks: new Map([
         ["json", JsonBlockRenderer],
         ["link", RenderLink],
+        ["external-link", RenderExternalLink],
         ["markdown", RenderMarkdown],
         ["toggle", RenderToggle],
         ["screen", RenderScreenBlock],

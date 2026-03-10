@@ -28,7 +28,7 @@ export interface MapBlock extends Block {
 
 function parseLonLat(value: MapBlockValue): [number, number] | null {
     if (typeof value === "object" && value !== null) {
-        if ("longitude" in value && "latitude" in value) {
+        if ("longitude" in value && "latitude" in value && value.longitude && value.latitude) {
             return [value.longitude, value.latitude];
         }
     }

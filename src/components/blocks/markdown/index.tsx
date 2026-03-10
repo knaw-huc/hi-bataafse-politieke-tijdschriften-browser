@@ -22,6 +22,7 @@ export default function MarkdownBlockRenderer({block}: { block: Block }) {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeRaw, rehypeSanitize]}
             components={{
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 a: ({node, ...props}) => <a className={classes.link} {...props} />
             }}
         >

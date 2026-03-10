@@ -29,6 +29,7 @@ const schemaApi = {
             return false;
         }
     },
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     childSchema(schema: SchemaLike, _key: string): SchemaLike {
         return schema ?? undefined;
     },

@@ -113,6 +113,12 @@
   "screens.tijdschrift-detail.seclit": "Secondary literature",
   "screens.tijdschrift-detail.seclit.secundaireLiteratuur": "",
   "screens.tijdschrift-detail.seclit.secundaireLiteratuur.info": "",
+  "screens.tijdschrift-detail.publicatie.vervolgTitelVan": "Other title",
+  "screens.tijdschrift-detail.publicatie.vervolgTitelVan.info": "",
+  "screens.tijdschrift-detail.publicatie.zieOok1": "See also (1)",
+  "screens.tijdschrift-detail.publicatie.zieOok1.info": "",
+  "screens.tijdschrift-detail.publicatie.zieOok2": "See also (2)",
+  "screens.tijdschrift-detail.publicatie.zieOok2.info": "",
 
   "screens.uitgever-drukker-detail": "Printer or publisher details",
   "screens.uitgever-drukker-detail.uitgever-drukker": "",

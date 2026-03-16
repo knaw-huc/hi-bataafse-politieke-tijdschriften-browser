@@ -63,8 +63,8 @@ export default function MapBlockRenderer({ block }: { block: Block }) {
         const vectorSource = new VectorSource({ features: [markerFeature] });
 
         const tileSource = config?.tileUrl
-            ? new OSM({ url: config.tileUrl })
-            : new OSM();
+            ? new OSM({ url: config.tileUrl, attributions: "© OpenStreetMap contributors", crossOrigin: "anonymous" })
+            : new OSM({ attributions: "© OpenStreetMap contributors", crossOrigin: "anonymous" });
 
         const map = new Map({
             target: mapRef.current,
@@ -84,6 +84,11 @@ export default function MapBlockRenderer({ block }: { block: Block }) {
             mapInstanceRef.current = null;
         };
     }, [lonLat, zoom, config?.tileUrl]);
+
+    useEffect(() => {
+        if (!mapInstanceRef.current) return;
+        mapInstanceRef.current.getView().setZoom(zoom);
+    }, [zoom]);
 
     if (!lonLat) {
         return <span className={classes.empty}>—</span>;

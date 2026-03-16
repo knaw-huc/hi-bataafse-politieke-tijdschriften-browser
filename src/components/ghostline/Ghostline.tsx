@@ -1,4 +1,4 @@
-import classes from "./GhostLine.module.css";
+import classes from "./Ghostline.module.css";
 
 export default function GhostLine() {
     return (

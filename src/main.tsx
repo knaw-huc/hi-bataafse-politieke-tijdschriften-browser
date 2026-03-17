@@ -30,6 +30,11 @@ if (window.location.pathname === '/') {
     window.location.replace(target);
 }
 
+console.log(`Panoptes API URL: ${getVar(panoptesUrl)}`);
+console.log(`Panoptes API search path: ${getVar(panoptesSearchPath)}`);
+console.log(`Panoptes API detail path: ${getVar(panoptesDetailPath)}`);
+
+
 const root = createPanoptesRoot(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',

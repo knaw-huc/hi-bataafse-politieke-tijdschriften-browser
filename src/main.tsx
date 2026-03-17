@@ -23,17 +23,9 @@ const getVar = (envVariable: string): string | undefined =>
         ? (envVariable.slice(1) in import.meta.env ? import.meta.env[envVariable.slice(1)] : undefined)
         : envVariable;
 
-if (window.location.pathname === '/') {
-    const dataset = getVar(panoptesDataset);
-    const searchPath = getVar(panoptesSearchPath);
-    const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
-    window.location.replace(target);
-}
-
 console.log(`Panoptes API URL: ${getVar(panoptesUrl)}`);
 console.log(`Panoptes API search path: ${getVar(panoptesSearchPath)}`);
 console.log(`Panoptes API detail path: ${getVar(panoptesDetailPath)}`);
-
 
 const root = createPanoptesRoot(document.getElementById('root')!, {
     url: getVar(panoptesUrl),

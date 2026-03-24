@@ -15,7 +15,7 @@ A web application for browsing and exploring Dutch historical political journals
 ## Prerequisites
 
 - Node.js (with npm)
-- A running [Panoptes](https://github.com/knaw-huc/panoptes) backend service (defaults to `http://localhost:8000`)
+- A running [Panoptes](https://github.com/knaw-huc/panoptes) backend service.
 
 ## Getting Started
 
@@ -27,7 +27,21 @@ npm install
 
 ### Configure environment
 
-Copy or edit the `.env` file to point to your Panoptes backend:
+The project supports two environment mechanisms that work together:
+
+**Docker (production/staging)** — environment variables are injected at container startup. `conf/entrypoint.sh` runs `envsubst` over the built JS files, replacing literal `$VITE_*` placeholders with the actual values from the container environment before Nginx starts serving. No `.env` file is needed in the image; configure the variables in Portainer (or any Docker orchestrator).
+
+**Local development** — create a `.env.development` file (or `.env` as a fallback) in the project root. Vite injects these into `import.meta.env` at dev-server startup. The project uses Vite's [mode system](https://vite.dev/guide/env-and-mode):
+
+| File | When used |
+|---|---|
+| `.env` | Shared defaults, always loaded |
+| `.env.development` | `npm run dev` (Vite `development` mode) |
+| `.env.production` | `npm run build` (Vite `production` mode) |
+| `.env.staging` | `npm run build -- --mode staging` |
+| `.env.local` | Local overrides, never commit |
+
+Example `.env.development`:
 
 ```env
 VITE_PANOPTES_URL=http://localhost:8000
@@ -36,6 +50,8 @@ VITE_PANOPTES_DATASET=politieke-tijdschriften
 VITE_PANOPTES_SEARCH_PATH=/$dataset/search
 VITE_PANOPTES_DETAIL_PATH=/$dataset/details/$id
 ```
+
+**Available variables**
 
 | Variable | Description |
 |---|---|
@@ -75,8 +91,11 @@ npm run lint
 src/
   main.tsx          # Application entry point and Panoptes configuration
 public/             # Static assets
+conf/
+  entrypoint.sh     # Docker entrypoint: runs envsubst over built JS, then starts Nginx
+  nginx.conf        # Nginx configuration
 index.html          # HTML template
-.env                # Environment configuration
+.env.development    # Local dev environment (not committed — create from the example above)
 vite.config.ts      # Vite build configuration
 tsconfig.json       # TypeScript configuration
 eslint.config.js    # ESLint configuration

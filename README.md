@@ -1,614 +1,80 @@
-# Bataafse Politieke Tijdschriften Browser
+# Bataafse Politieke Tijdschriften Browser (Panoptes)
 
-A web application for browsing and exploring Dutch historical political journals (Bataafse Politieke Tijdschriften). Built with React and the [KNAW-HUC Panoptes](https://github.com/knaw-huc/panoptes) framework for digital collection browsing.
+A web front-end for browsing the **Bataafse Politieke Tijdschriften** dataset of Dutch
+historical political journals, built on the
+[KNAW-HuC Panoptes](https://github.com/knaw-huc) faceted-search framework. It provides
+faceted search over the publications with a custom result card and detail views, and
+supports English/Dutch localization.
 
-## Tech Stack
+## Tech stack
 
-- **React 19** with TypeScript
-- **Vite 7** (build tool and dev server)
-- **Tailwind CSS v4** (styling)
-- **React-Markdown** with rehype plugins (markdown content rendering, https://remarkjs.github.io/react-markdown/)
-- **@knaw-huc/faceted-search-react** (faceted search components, https://github.com/knaw-huc/faceted-search-react)
-- **@knaw-huc/panoptes-react** (digital collection browser framework, https://github.com/knaw-huc/panoptes-react)
-- **Panoptes-API** (https://github.com/knaw-huc/panoptes)
+- [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- [Vite](https://vite.dev/) for dev server and bundling
+- [`@knaw-huc/panoptes-react`](https://www.npmjs.com/package/@knaw-huc/panoptes-react) and
+  [`@knaw-huc/panoptes-react-blocks`](https://www.npmjs.com/package/@knaw-huc/panoptes-react-blocks) for the search UI
+- [i18next](https://www.i18next.com/) for English/Dutch localization
 
-## Prerequisites
+## Getting started
 
-- Node.js (with npm)
-- A running [Panoptes](https://github.com/knaw-huc/panoptes) backend service.
-
-## Getting Started
-
-### Install dependencies
+Requires [Node.js](https://nodejs.org/) (with npm) and a running Panoptes backend serving
+the `politieke-tijdschriften` dataset.
 
 ```bash
 npm install
-```
-
-### Configure environment
-
-The project supports two environment mechanisms that work together:
-
-**Docker (production/staging)** — environment variables are injected at container startup. `conf/entrypoint.sh` runs `envsubst` over the built JS files, replacing literal `$VITE_*` placeholders with the actual values from the container environment before Nginx starts serving. No `.env` file is needed in the image; configure the variables in Portainer (or any Docker orchestrator).
-
-**Local development** — create a `.env.development` file (or `.env` as a fallback) in the project root. Vite injects these into `import.meta.env` at dev-server startup. The project uses Vite's [mode system](https://vite.dev/guide/env-and-mode):
-
-| File | When used |
-|---|---|
-| `.env` | Shared defaults, always loaded |
-| `.env.development` | `npm run dev` (Vite `development` mode) |
-| `.env.production` | `npm run build` (Vite `production` mode) |
-| `.env.staging` | `npm run build -- --mode staging` |
-| `.env.local` | Local overrides, never commit |
-
-Example `.env.development`:
-
-```env
-VITE_PANOPTES_URL=http://localhost:8000
-VITE_PANOPTES_IS_EMBEDDED=false
-VITE_PANOPTES_DATASET=politieke-tijdschriften
-VITE_PANOPTES_SEARCH_PATH=/$dataset/search
-VITE_PANOPTES_DETAIL_PATH=/$dataset/details/$id
-```
-
-**Available variables**
-
-| Variable | Description |
-|---|---|
-| `VITE_PANOPTES_URL` | Base URL of the Panoptes backend service |
-| `VITE_PANOPTES_IS_EMBEDDED` | Set to `true` when embedding the app in an iframe |
-| `VITE_PANOPTES_DATASET` | Dataset identifier used in API paths |
-| `VITE_PANOPTES_SEARCH_PATH` | Search endpoint path template (`$dataset` is replaced at runtime) |
-| `VITE_PANOPTES_DETAIL_PATH` | Detail endpoint path template (`$dataset` and `$id` are replaced at runtime) |
-
-### Run the development server
-
-```bash
+cp .env.example .env   # then edit values as needed
 npm run dev
 ```
 
-### Build for production
+The dev server prints a local URL (default <http://localhost:5173>).
 
-```bash
-npm run build
-```
+## Configuration
 
-### Preview the production build
+The app reads its Panoptes connection settings from environment variables. Vite injects
+these into `import.meta.env` at dev/build time; adjust the values in `.env` (or `.env.local`):
 
-```bash
-npm run preview
-```
+| Variable                     | Description                                              | Example                                |
+| ---------------------------- | -------------------------------------------------------- | -------------------------------------- |
+| `VITE_PANOPTES_URL`          | Base URL of the Panoptes backend API                     | `http://localhost:8000`                |
+| `VITE_PANOPTES_IS_EMBEDDED`  | Whether the UI runs embedded (no top-level chrome)       | `false`                                |
+| `VITE_PANOPTES_DATASET`      | Dataset identifier to query                              | `politieke-tijdschriften`              |
+| `VITE_PANOPTES_SEARCH_PATH`  | Search route template (`$dataset` is substituted)        | `/$dataset/search`                     |
+| `VITE_PANOPTES_DETAIL_PATH`  | Detail route template (`$dataset`, `$id` substituted)    | `/$dataset/details/$id`                |
+| `VITE_PANOPTES_THEME`        | Panoptes UI theme                                        | `huygens`                              |
 
-### Lint
+In Docker (production/staging) the variables are injected at container startup:
+`conf/entrypoint.sh` runs `envsubst` over the built JS files, replacing the literal
+`$VITE_*` placeholders with the container environment values before Nginx starts serving.
+No `.env` file is needed in the image — configure the variables in your orchestrator.
 
-```bash
-npm run lint
-```
+## Scripts
 
-## Project Structure
+| Command           | Description                                    |
+| ----------------- | ---------------------------------------------- |
+| `npm run dev`     | Start the Vite dev server with HMR             |
+| `npm run build`   | Type-check (`tsc -b`) and build for production |
+| `npm run preview` | Preview the production build locally           |
+| `npm run lint`    | Run ESLint                                     |
+
+## Project structure
 
 ```
 src/
-  main.tsx          # Application entry point and Panoptes configuration
-public/             # Static assets
+  main.tsx              App entry; configures the Panoptes root, routes, and result card
+  components/results/   PublicationResultsCard — custom search result card
+  i18n/                 i18next setup and en/nl translations
+  css/                  Theme and global styles
+public/
+  vite.svg
 conf/
-  entrypoint.sh     # Docker entrypoint: runs envsubst over built JS, then starts Nginx
-  nginx.conf        # Nginx configuration
-index.html          # HTML template
-.env.development    # Local dev environment (not committed — create from the example above)
-vite.config.ts      # Vite build configuration
-tsconfig.json       # TypeScript configuration
-eslint.config.js    # ESLint configuration
+  entrypoint.sh         Docker entrypoint: runs envsubst over built JS, then starts Nginx
+  nginx.conf            Nginx configuration
+Dockerfile              Container image build
 ```
 
-## Screen Blocks
+## Localization
 
-The screen block system (`src/components/blocks/screen/`) renders structured detail screens driven by a declarative JSON configuration from the Panoptes API. A screen block is registered as a Panoptes block of type `"screen"` and can be used anywhere the framework renders blocks.
-
-### Architecture overview
-
-```
-RenderScreenBlock          # Registered Panoptes block component
-└── ScreenProvider         # React context (screenDefinition + data + active tab)
-    └── ScreenRenderer     # Top-level layout shell
-        ├── ScreenLinks    # Optional navigation links (header area)
-        ├── ScreenTabs     # Optional tab bar (hidden when only one tab)
-        ├── ScreenSidebar  # Optional icon sidebar (Lucide icons)
-        ├── ScreenForm     # Form body
-        │   └── FormRow    # Recursive row rendering (header / group / footer / row)
-        │       └── FormColumn → FormElement   # Column + element rendering
-        └── ScreenActions  # Optional action buttons with confirmation dialogs
-```
-
-### ScreenBlock config schema
-
-A `ScreenBlock` received from the API has the following shape:
-
-```jsonc
-{
-  "type": "screen",
-  "value": { /* flat or nested data object */ },
-  "config": { /* ScreenDefinition — see below */ }
-}
-```
-
-#### ScreenDefinition
-
-| Field | Type | Required | Description                                                                                                  |
-|---|---|----------|--------------------------------------------------------------------------------------------------------------|
-| `id` | `string` | yes      | Unique identifier                                                                                            |
-| `label` | `string` | no       | Screen heading passed through `translateFn`; omit to use the autokey `screens.{id}`                          |
-| `screenType` | `"normal"` | yes      | Screen layout variant (not used yet - intended for screen variants, eg., mobile, in a popover, confirmation) |
-| `tabs` | `TabDefinition[]` | no       | Tab list; a tab bar is shown only when there are more than one                                               |
-| `activeTabId` | `string` | no       | Initially active tab (defaults to first tab)                                                                 |
-| `links` | `LinkDefinition[]` | no       | Navigation links rendered above the tabs                                                                     |
-| `actions` | `ActionDefinition[]` | no       | Action buttons rendered in the footer                                                                        |
-| `form` | `FormDefinition` | yes      | Content form (rows of elements)                                                                              |
-| `sidebar` | `SidebarDefinition` | no       | Icon sidebar rendered to the left of the form                                                                |
-
-#### TabDefinition (not used yet)
-
-Tabs are .... tabs, and meant for executing an operation after clicking a tab.
-
-| Field | Type | Required | Description                                                  |
-|---|---|---|--------------------------------------------------------------|
-| `id` | `string` | yes | Unique tab identifier                                        |
-| `label` | `string` | no | Tab label; omit to use the autokey `screens.{screenId}.tabs.{tabId}` |
-| `operation` | `OperationDefinition` | no | API operation to call when the tab is selected |
-| `operationList` | `OperationListItem[]` | no | Sub-navigation items shown beneath the active tab            |
-
-Each `OperationListItem` has an `id`, an optional `label` (autokey: `screens.{screenId}.tabs.{tabId}.{itemId}`), and an `operation`.
-
-#### LinkDefinition (not used yet)
-
-Links are intended to be 'follow-up' operations after fetching data. For example, we could envision the flow as follows:
-
-- Fetch item data
-- Link -> Fetch screen definition
-- Link -> Fetch translations
-- Link -> Fetch data from remote system
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `id` | `string` | yes | Unique link identifier |
-| `label` | `string` | yes | Link label |
-| `operation` | `OperationDefinition` | no | API operation to execute on click |
-| `href` | `string` | no | URL to navigate to on click |
-
-#### ActionDefinition (not used yet)
-
-Actions are meant to be simple API operations, executed after action button clicks.
-
-| Field | Type | Required | Description |
-|---|---|---|---|
-| `id` | `string` | yes | Unique action identifier |
-| `label` | `string` | no | Button label; omit to use the autokey `screens.{screenId}.actions.{actionId}` |
-| `activate` | `"always" \| "onDirty" \| "onValid" \| "onDirtyAndValid"` | yes | When the button is enabled |
-| `confirmation` | `ConfirmationDefinition` | yes | Confirmation dialog settings |
-| `operation` | `OperationDefinition` | yes | API operation to call on confirm |
-
-**ConfirmationDefinition**
-
-| Field | Type | Description |
-|---|---|---|
-| `askConfirmation` | `"always" \| "never" \| "onDirty"` | When to show a confirmation dialog |
-| `labels.title` | `string` | Dialog title; omit to use the autokey `screens.{screenId}.actions.{actionId}.title` |
-| `labels.message` | `string` | Dialog message; omit to use the autokey `screens.{screenId}.actions.{actionId}.message` |
-| `labels.ok` | `string` | Confirm button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.ok` |
-| `labels.cancel` | `string` | Cancel button label; omit to use the autokey `screens.{screenId}.actions.{actionId}.cancel` |
-
-#### FormDefinition and rows
-
-```jsonc
-{
-  "form": {
-    "rows": [ /* RowDefinition[] */ ]
-  }
-}
-```
-
-**RowDefinition**
-
-| Field | Type | Description |
-|---|---|---|
-| `displayType` | `"header" \| "group" \| "footer" \| "row"` | Styling variant (default: `"row"`) |
-| `label` | `string` | Optional fieldset legend; omit to use the autokey `screens.{screenId}.{groupId}` (requires `groupId`) |
-| `groupId` | `string` | Used as the React key and `data-group-id` attribute |
-| `elements` | `ElementDefinition[]` | Direct child elements (mutually exclusive with `columns`/`rows`) |
-| `columns` | `ColumnDefinition[]` | Multi-column layout; each column holds its own elements |
-| `rows` | `RowDefinition[]` | Nested rows (recursive) |
-
-Row content is resolved in order of priority: nested `rows` → `columns` → `elements`.
-
-#### ElementDefinition
-
-| Field | Type | Description |
-|---|---|---|
-| `value` | `string \| string[] \| Record<string, string>` | Binding expression(s) — see [Bindings](#bindings) |
-| `type` | `string` | Element type (see [Element types](#element-types)); inferred from data when omitted |
-| `label` | `string` | Field label rendered above the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}` (only available for single-string `value`) |
-| `infoLabel` | `string` | Secondary info text rendered below the element; omit to use the autokey `screens.{screenId}.{groupId}.{field}.info` (only available for single-string `value`) |
-| `hidden` | `boolean` | Hides the element when `true` |
-| `config` | `object` | Type-specific configuration (e.g. `options` for `select`, `itemTemplate` for `array`) |
-
-#### SidebarDefinition
-
-| Field | Type | Description |
-|---|---|---|
-| `id` | `string` | Unique sidebar identifier |
-| `width` | `string` | Optional CSS width for the sidebar (sets `--sidebar-width`) |
-| `sections` | `SidebarSectionDefinition[]` | Groups of navigation items separated by a divider |
-
-Each `SidebarNavItemDefinition` has an `icon` (Lucide icon name in kebab-case, e.g. `"book-open"`), an optional `label` (autokey: `screens.{screenId}.sidebar.{sectionId}.{itemId}`), an `operation`, and an optional `active` flag.
-
-### Bindings
-
-Element `value` fields and `itemTemplate` field values use binding expressions to pull data from the block's payload:
-
-| Expression | Source |
-|---|---|
-| `$data#/field/subfield` | The `value` object of the `ScreenBlock` |
-| `$itemData#/field` | The current item object when rendering inside an `array` element |
-
-Path segments are separated by `/`.
-
-The `value` field on an `ElementDefinition` supports three forms:
-
-**Single string** — resolves to a single value and enables autokey label generation:
-```jsonc
-{ "value": "$data#/title", "type": "text" }
-```
-
-**Array of strings** — each binding is resolved independently; the block receives an array of resolved values. Useful for blocks that combine multiple data fields:
-```jsonc
-{ "value": ["$data#/firstName", "$data#/lastName"], "type": "full-name" }
-```
-
-**Object with string values** — each property's binding expression is resolved independently; the block receives a plain object with the resolved values. Useful for blocks that need named inputs (e.g. a map block needing separate latitude/longitude fields). No autokey is generated in this form:
-```jsonc
-{
-  "value": {
-    "latitude": "$data#/plaatsBreedtegraad",
-    "longitude": "$data#/plaatsLengtegraad"
-  },
-  "type": "map",
-  "config": { "zoom": 6 }
-}
-```
-
-### Autokey label generation
-
-All `label` (and `infoLabel`) fields are optional. When omitted, a translation key is derived automatically and passed through `translateFn`. The keys follow a hierarchical pattern based on the screen ID, group ID, and field path:
-
-| Context | Autokey pattern | Example |
-|---|---|---|
-| Screen heading | `screens.{screenId}` | `screens.journal-detail` |
-| Group legend | `screens.{screenId}.{groupId}` | `screens.journal-detail.metadata` |
-| Element label | `screens.{screenId}.{groupId}.{field}` | `screens.journal-detail.metadata.title` |
-| Element info label | `screens.{screenId}.{groupId}.{field}.info` | `screens.journal-detail.metadata.title.info` |
-| Tab label | `screens.{screenId}.tabs.{tabId}` | `screens.journal-detail.tabs.general` |
-| Tab operation list item | `screens.{screenId}.tabs.{tabId}.{itemId}` | `screens.journal-detail.tabs.general.volume-1` |
-| Sidebar nav item | `screens.{screenId}.sidebar.{sectionId}.{itemId}` | `screens.journal-detail.sidebar.main.home` |
-| Action button | `screens.{screenId}.actions.{actionId}` | `screens.journal-detail.actions.save` |
-| Action confirmation title | `screens.{screenId}.actions.{actionId}.title` | `screens.journal-detail.actions.save.title` |
-| Action confirmation message | `screens.{screenId}.actions.{actionId}.message` | `screens.journal-detail.actions.save.message` |
-| Action confirmation ok | `screens.{screenId}.actions.{actionId}.ok` | `screens.journal-detail.actions.save.ok` |
-| Action confirmation cancel | `screens.{screenId}.actions.{actionId}.cancel` | `screens.journal-detail.actions.save.cancel` |
-
-The `{field}` segment is the path from the binding expression — e.g. `$data#/title` produces `title`, and `$data#/address/city` produces `address.city`.
-
-When a `label` is provided explicitly it is used as-is (also passed through `translateFn`), which allows overriding the autokey with a custom translation key or a literal string.
-
-### Element types
-
-The element type can be an unspecified type, or a type present in the collection of
-Panoptes-known blocks (list, cmdi) and/or application-specific custom blocks.
-
-When `type` is not specified on an `ElementDefinition` the type is inferred from the resolved value:
-
-| Inferred condition | Type |
-|---|---|
-| Array | `array` |
-| Boolean | `checkbox` |
-| Number | `number` |
-| String matching `YYYY-MM-DD…` | `date` |
-| String containing `\n` | `textarea` |
-| Anything else | `text` |
-
-Explicit types available:
-
-| Type | Rendered as | Config options |
-|---|---|---|
-| `text` | `<input type="text">` (read-only) | — |
-| `textarea` | `<textarea>` (read-only) | — |
-| `number` | `<input type="number">` (read-only) | — |
-| `date` | `<input type="date">` (read-only) | — |
-| `checkbox` | `<input type="checkbox">` (read-only) | — |
-| `prose` | Inline `<span>` | — |
-| `select` | Resolved option label in `<input type="text">` | `config.options: { value, label }[]` |
-| `array` | List of text inputs, or templated item rows | `config.itemTemplate`: map of field name → `ElementDefinition` |
-
-Any `type` that matches a registered Panoptes block is rendered using that block component. If no matching block is found (or the block component throws), the element falls back to the native HTML renderer above.
-
-### Example of a full screen definition
-
-```jsonc
-{
-  "id": "tijdschrift-detail",
-  "screenType": "normal",
-  "globals": {
-  },
-  "tabs": [
-  ],
-  "links": [
-  ],
-  "actions": [
-  ],
-  "sidebar": {
-    "id": "tijdschrift-sidebar",
-    "sections": [
-      {
-        "id": "main",
-        "items": [
-          {
-            "id": "tijdschriften",
-            "icon": "newspaper",
-            "label": "tijdschrift-detail.tijdschrift-sidebar.label.publications"
-          }
-        ]
-      },
-      {
-        "id": "util",
-        "items": [
-          {
-            "id": "instellingen",
-            "icon": "settings",
-            "label": "tijdschrift-detail.tijdschrift-sidebar.label.settings"
-          }
-        ]
-      }
-    ]
-  },
-  "form": {
-    "rows": [
-      {
-        "displayType": "group",
-        "groupId": "titel",
-        "columns": [
-          {
-            "elements": [
-              {
-                "value": "$data#/lidwoordTitel",
-                "type": "label"
-              }
-            ]
-          },
-          {
-            "elements": [
-              {
-                "value": "$data#/titelVanTijdschrift",
-                "type": "label"
-              }
-            ]
-          },
-          {
-            "elements": [
-              {
-                "value": "$data#/onderTitel",
-                "type": "label"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "publicatie",
-        "rows": [
-          {
-            "columns": [
-              {
-                "elements": [
-                  {
-                    "value": "$data#/uitgever",
-                    "type": "link",
-                    "config": {
-                      "url": "/politieke-tijdschriften-uitgever_drukker/details/$uitgeverId"
-                    }
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/drukker",
-                    "type": "link",
-                    "config": {
-                      "url": "/politieke-tijdschriften-uitgever_drukker/details/$drukkerId"
-                    }
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/plaats",
-                    "type": "link",
-                    "config": {
-                      "url": "/politieke-tijdschriften-plaatsnaam/details/$plaatsId"
-                    }
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "columns": [
-              {
-                "elements": [
-                  {
-                    "value": "$data#/uitgeverZeker",
-                    "type": "toggle"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/drukkerZeker",
-                    "type": "toggle"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/nietBewaard",
-                    "type": "toggle"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/vrijheidGelijkheidBroederschap",
-                    "type": "toggle"
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "periode",
-        "rows": [
-          {
-            "columns": [
-              {
-                "elements": [
-                  {
-                    "value": "$data#/eersteNummer",
-                    "type": "label"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/laatsteNummer",
-                    "type": "label"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/prijsDuiten",
-                    "type": "label"
-                  }
-                ]
-              },
-              {
-                "elements": [
-                  {
-                    "value": "$data#/afleveringen",
-                    "type": "label"
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            "elements": [
-              {
-                "value": "$data#/formaat",
-                "type": "label"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "classificatie",
-        "columns": [
-          {
-            "elements": [
-              {
-                "value": "$data#/vormTijdschrift",
-                "type": "label"
-              }
-            ]
-          },
-          {
-            "elements": [
-              {
-                "value": "$data#/typeTijdschrift",
-                "type": "label"
-              }
-            ]
-          },
-          {
-            "elements": [
-              {
-                "value": "$data#/politiekePositie",
-                "type": "label"
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "inhoud",
-        "elements": [
-          {
-            "value": "$data#/korteOmschrijvingInhoud",
-            "type": "markdown",
-            "config": {
-            }
-          },
-          {
-            "value": "$data#/verantwoordingSelectie",
-            "type": "markdown",
-            "config": {
-            }
-          },
-          {
-            "value": "$data#/toelichtingRedacteurAuteur",
-            "type": "markdown",
-            "config": {
-            }
-          },
-          {
-            "value": "$data#/advertenties_en_andere_verwijsplaatsen",
-            "type": "markdown"
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "aanvullende-titels",
-        "elements": [
-          {
-            "value": "$data#/aanvullendeTitels",
-            "type": "list"
-          }
-        ]
-      },
-      {
-        "displayType": "group",
-        "groupId": "artikel-types",
-        "elements": [
-          {
-            "value": "$data#/artikelType",
-            "type": "list"
-          }
-        ]
-      }
-    ]
-  }
-}
-```
+The interface auto-detects the browser language and supports English (`en`) and
+Dutch (`nl`), falling back to English. Translation strings live in
+`src/i18n/locales/<lang>/common.json`.
+</content>
+</invoke>

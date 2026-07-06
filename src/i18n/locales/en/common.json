@@ -27,6 +27,8 @@
   "panoptes.noValue": "No value",
   "panoptes.mainSiteNavigation": "Main site navigation",
 
+  "searchResults.title": "{{title}} (Aantal afleveringen: {{numPublications}})",
+
   "screens.tijdschrift-detail": "Publication data",
   "screens.tijdschrift-detail.titel": "Title",
   "screens.tijdschrift-detail.titel.lidwoordTitel": "Adjective",

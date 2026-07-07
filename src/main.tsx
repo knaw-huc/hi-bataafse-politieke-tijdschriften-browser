@@ -6,6 +6,7 @@ import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
 import './css/index.css';
+import LinkSetBlockRenderer from "./components/linkset";
 
 const panoptesUrl = '$VITE_PANOPTES_URL';
 const panoptesIsEmbedded = '$VITE_PANOPTES_IS_EMBEDDED';
@@ -24,6 +25,8 @@ if (window.location.pathname === '/') {
     const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
     window.location.replace(target);
 }
+
+panoptesBlocksLibrary.set('external-link-set', LinkSetBlockRenderer);
 
 const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElementById('root')!, {
     url: getVar(panoptesUrl),

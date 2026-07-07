@@ -1,0 +1,10 @@
+.empty {
+    color: #a0a0a0;
+    font-weight: 700;
+}
+
+.link {
+    text-decoration: underline;
+    font-family: inherit;
+    color: #0000ff;
+}

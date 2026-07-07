@@ -27,6 +27,8 @@
   "panoptes.no": "Nee",
   "panoptes.mainSiteNavigation": "Hoofdnavigatie",
 
+  "searchResults.title": "{{title}} (Aantal afleveringen: {{numPublications}})",
+
   "screens.tijdschrift-detail": "Tijdschriftgegevens",
   "screens.tijdschrift-detail.titel": "Titel",
   "screens.tijdschrift-detail.titel.lidwoordTitel": "Lidwoord",

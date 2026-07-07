@@ -14,7 +14,12 @@ export interface PublicationResultCardProps extends PublicationSearchResultItem 
 
 export default function PublicationResultsCard(props: PublicationResultCardProps) {
     const {translateFn} = usePanoptes();
-    const title = translateFn && translateFn('searchResults.title', { title: props.title, numPublications: props.numPublications }) || props.title
+
+    const title = translateFn && translateFn('searchResults.title', {
+        title: props.title,
+        numPublications: props.numPublications || '—'
+    }) || props.title;
+
     const resultCardProps: ResultCardProps = {
         title,
         link: props.link,

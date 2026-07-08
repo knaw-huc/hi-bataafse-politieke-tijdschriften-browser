@@ -10,7 +10,7 @@ export default function LinkSetBlockRenderer({block}: { block: Block }) {
 
     const { value } = block as LinkSetBlock;
 
-    if (!value) {
+    if (!value || !Array.isArray(value) || value.length === 0) {
         return <span className={classes.empty}>—</span>;
     }
 

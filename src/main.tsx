@@ -40,7 +40,6 @@ const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElement
     theme: 'huygens',
     blocks: panoptesBlocksLibrary,
     branding: 'Bataafse Politieke Tijdschriften',
-    locale: detectLocale(),
     resultCardRenderer: (result, link) =>
                                 <PublicationResultsCard {...result} link={link}/>,
     navItems: []

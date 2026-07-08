@@ -11,7 +11,7 @@ export default function SecondaryLiteratureRenderer({block}: { block: Block }) {
 
     const {value} = block as MarkdownListBlock;
 
-    if (!value) {
+    if (!value || !Array.isArray(value) || value.length === 0) {
         return <span className={classes.empty}>—</span>;
     }
 

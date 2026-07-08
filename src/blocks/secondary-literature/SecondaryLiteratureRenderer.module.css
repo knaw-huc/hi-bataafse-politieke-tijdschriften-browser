@@ -4,10 +4,13 @@
 }
 
 .list {
+    list-style: none;
     margin: 0;
+    padding: 0;
 }
 
 .item {
+    border-left: 3px solid #a0a0a0;
+    padding-left: 0.75em;
     margin-bottom: 1em;
-    border-bottom: 1px;
 }

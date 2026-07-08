@@ -1,5 +1,5 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from '@knaw-huc/panoptes-react';
-import {createTranslate, detectLocale} from "./i18n/i18n.ts";
+import {createTranslate} from "./i18n/i18n.ts";
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
 import PublicationResultsCard, { type PublicationSearchResultItem } from "./components/results/PublicationResultsCard.tsx";
 import LinkSetBlockRenderer from "./blocks/linkset";

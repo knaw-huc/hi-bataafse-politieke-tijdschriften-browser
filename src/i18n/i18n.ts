@@ -6,7 +6,7 @@ import type {TranslateFn} from '@knaw-huc/faceted-search-react';
 const supportedLocales = ['en', 'nl'] as const;
 type SupportedLocale = typeof supportedLocales[number];
 
-function detectLocale(): SupportedLocale {
+export function detectLocale(): SupportedLocale {
     const browserLang = navigator.language.split('-')[0];
     return supportedLocales.includes(browserLang as SupportedLocale)
         ? browserLang as SupportedLocale

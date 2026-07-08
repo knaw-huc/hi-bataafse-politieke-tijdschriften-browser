@@ -1,0 +1,13 @@
+.empty {
+    color: #a0a0a0;
+    font-weight: 700;
+}
+
+.list {
+    margin: 0;
+}
+
+.item {
+    margin-bottom: 1em;
+    border-bottom: 1px;
+}

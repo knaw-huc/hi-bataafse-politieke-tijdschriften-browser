@@ -1,3 +1,20 @@
+/* Override CSS based on selectors using substrings - this is something we need to look at for future projects */
+/* Header and top-level nav */
+header > [class*="_content_"] {
+    /* The library stacks this into a column below 48rem; keep branding and nav on one row. */
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: none;
+    margin-inline: 0;
+}
+
+header [class*="_navigation_"] {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
 header [class*="_navigation_"] a {
     color: #ffffff;
     background-color: #4B718E;
@@ -15,11 +32,71 @@ div [class*="_branding_"] {
     align-items: center;
 }
 
-header [class*="_navigation_"] > :last-child {
-    margin-left: auto;
+/* Detail page — stop the property rows overflowing on narrow viewports.
+   Two separate floors were forcing the content wider than its container:
+   the UA default min-inline-size on fieldset, and the library's min-width on
+   the property list (which nested sub-lists inherit as well). */
+main fieldset {
+    min-inline-size: 0;
 }
 
-/* Tags overflow the card on narrow screens; the library sets display:flex without wrapping */
-li [class*="_tags_"] {
+main dl[class*="_list_"] {
+    min-width: min(24rem, 100%);    /* Keep the 24rem floor when it fits, shrink when it doesn't */
+}
+
+/* Result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
+[class*="_card_"]:has([class*="_link_"]) {
+    list-style: none;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_link_"] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_title_"] h3 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1d3b44;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] {
+    color: #374151;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    grid-area: unset;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] em,
+[class*="_card_"]:has([class*="_link_"]) [class*="_description_"] mark {
+    background-color: #d4e7db;
+    color: #1d3b44;
+    padding: 0.05em 0.3em;
+    border-radius: 4px;
+    font-style: normal;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_tags_"] {
+    display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    align-self: flex-start;
+    gap: 0.5rem;
+}
+
+[class*="_card_"]:has([class*="_link_"]) [class*="_tag_"] {
+    border: 1px solid #cbd5d1;
+    border-radius: 999px;
+    padding: 0.2rem 0.7rem;
+    font-size: 0.8rem;
+    color: #4b5d5a;
+    background-color: #ffffff;
 }

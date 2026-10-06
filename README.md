@@ -36,7 +36,7 @@ these into `import.meta.env` at dev/build time; adjust the values in `.env` (or 
 | ---------------------------- | -------------------------------------------------------- | -------------------------------------- |
 | `VITE_PANOPTES_URL`          | Base URL of the Panoptes backend API                     | `http://localhost:8000`                |
 | `VITE_PANOPTES_IS_EMBEDDED`  | Whether the UI runs embedded (no top-level chrome)       | `false`                                |
-| `VITE_PANOPTES_DATASET`      | Dataset identifier to query                              | `politieke-tijdschriften`              |
+| `VITE_PANOPTES_DATASET`      | Dataset `/` redirects to (other routes use the URL's)    | `politieke-tijdschriften`              |
 | `VITE_PANOPTES_SEARCH_PATH`  | Search route template (`$dataset` is substituted)        | `/$dataset/search`                     |
 | `VITE_PANOPTES_DETAIL_PATH`  | Detail route template (`$dataset`, `$id` substituted)    | `/$dataset/details/$id`                |
 | `VITE_PANOPTES_THEME`        | Panoptes UI theme                                        | `huygens`                              |

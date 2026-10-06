@@ -35,7 +35,6 @@ const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElement
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
     searchPath: getVar(panoptesSearchPath),
     detailPath: getVar(panoptesDetailPath),
-    dataset: getVar(panoptesDataset),
     translateFn: createTranslate(),
     theme: 'huygens',
     blocks: panoptesBlocksLibrary,

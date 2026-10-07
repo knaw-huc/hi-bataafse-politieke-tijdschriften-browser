@@ -1,23 +1,11 @@
 import i18next from 'i18next';
-import en from './locales/en/common.json';
 import nl from './locales/nl/common.json';
 import type {TranslateFn} from '@knaw-huc/faceted-search-react';
 
-const supportedLocales = ['en', 'nl'] as const;
-type SupportedLocale = typeof supportedLocales[number];
-
-export function detectLocale(): SupportedLocale {
-    const browserLang = navigator.language.split('-')[0];
-    return supportedLocales.includes(browserLang as SupportedLocale)
-        ? browserLang as SupportedLocale
-        : 'en';
-}
-
 i18next.init({
-    lng: detectLocale(),
-    fallbackLng: 'en',
+    lng: 'nl',
+    fallbackLng: 'nl',
     resources: {
-        en: {translation: en},
         nl: {translation: nl},
     },
     interpolation: {

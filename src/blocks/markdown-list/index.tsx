@@ -1,13 +1,13 @@
 import type {Block} from "@knaw-huc/panoptes-react";
 import {MarkdownBlockRenderer} from "@knaw-huc/panoptes-react-blocks";
-import classes from "./SecondaryLiteratureRenderer.module.css";
+import classes from "./MarkdownListRenderer.module.css";
 
 export interface MarkdownListBlock extends Block {
-    type: 'secondary-literature';
+    type: 'markdown-list';
     value: string | string[];
 }
 
-export default function SecondaryLiteratureRenderer({block}: { block: Block }) {
+export default function MarkdownListRenderer({block}: { block: Block }) {
 
     const {value} = block as MarkdownListBlock;
 

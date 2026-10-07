@@ -3,7 +3,7 @@ import {createTranslate} from "./i18n/i18n.ts";
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
 import PublicationResultsCard, { type PublicationSearchResultItem } from "./components/results/PublicationResultsCard.tsx";
 import LinkSetBlockRenderer from "./blocks/linkset";
-import SecondaryLiteratureRenderer from "./blocks/secondary-literature";
+import MarkdownListRenderer from "./blocks/markdown-list";
 import CountedPropertyListRenderer from "./blocks/counted-list";
 import SearchLinkBlockRenderer from "./blocks/search-link";
 import '@knaw-huc/panoptes-react/style.css';
@@ -30,7 +30,7 @@ if (window.location.pathname === '/') {
 }
 
 panoptesBlocksLibrary.set('external-link-set', LinkSetBlockRenderer);
-panoptesBlocksLibrary.set('secondary-literature', SecondaryLiteratureRenderer);
+panoptesBlocksLibrary.set('markdown-list', MarkdownListRenderer);
 panoptesBlocksLibrary.set('counted-list', CountedPropertyListRenderer);
 panoptesBlocksLibrary.set('search-link', SearchLinkBlockRenderer);
 

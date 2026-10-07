@@ -44,6 +44,17 @@ main dl[class*="_list_"] {
     min-width: min(24rem, 100%);    /* Keep the 24rem floor when it fits, shrink when it doesn't */
 }
 
+/* Search page — the library sizes the facet column with fit-content, so its width
+   follows the longest visible facet value and jumps when facet values are filtered.
+   Pin it to a fixed width on the side-by-side layout instead. */
+@media (width >= 64rem) {
+    [class*="_search_"] > [class*="_facets_"] {
+        width: 25rem;
+        min-width: 25rem;
+        flex-shrink: 0;
+    }
+}
+
 /* Result card — scoped to Panoptes ResultCard (has _link_), not dataset cards */
 [class*="_card_"]:has([class*="_link_"]) {
     list-style: none;

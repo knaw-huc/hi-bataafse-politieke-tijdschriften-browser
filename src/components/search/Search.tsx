@@ -7,11 +7,14 @@ import {
     useSelectedFacets,
     type Facets as IFacets
 } from "@knaw-huc/faceted-search-react";
-import {useFacets, usePanoptes, type Facet} from "@knaw-huc/panoptes-react";
+import {useDataset, useFacets, usePanoptes, type Facet} from "@knaw-huc/panoptes-react";
 import Facets from "./Facets.tsx";
 import Results from "./Results.tsx";
 import InPrintHistogram from "./InPrintHistogram.tsx";
 import classes from "./Search.module.css";
+
+// The in-print histogram is built on the periodicals' first/last issue years, so only that dataset shows it
+const histogramDatasets = ['politieke-tijdschriften'];
 
 function getValueRenderer(facet: Facet): ((value: string, valueLabel?: string) => string) | undefined {
     switch (facet.type) {
@@ -39,6 +42,7 @@ export default function Search() {
     // reset them by remounting the facets. In a transition, so a suspending remount keeps the old facets.
     const [facetsKey, setFacetsKey] = useState(0);
     const {translateFn, locale, pageSize} = usePanoptes();
+    const [dataset] = useDataset();
 
     const facets = registeredFacets.reduce<IFacets>((acc, facet) => {
         acc[facet.property] = {
@@ -55,7 +59,7 @@ export default function Search() {
                     <Facets key={facetsKey}/>
                 </div>
                 <div className={classes.results}>
-                    <InPrintHistogram/>
+                    {histogramDatasets.includes(dataset) && <InPrintHistogram/>}
                     <HookedSelectedFacetsWithClear onClear={() => startTransition(() => setFacetsKey(key => key + 1))}/>
                     <Results/>
                     <HookedPagination/>

@@ -3,6 +3,7 @@ import {useRouter} from "@tanstack/react-router";
 import {HookedResultsView, type SearchState} from "@knaw-huc/faceted-search-react";
 import {useDataset, usePanoptes, useSearch} from "@knaw-huc/panoptes-react";
 import type {PublicationSearchResultItem} from "../results/PublicationResultsCard.tsx";
+import {resultCards} from "../results/resultCards.ts";
 
 const resolveId = (item: PublicationSearchResultItem) => item.id;
 
@@ -15,13 +16,17 @@ export default function Results() {
     const router = useRouter();
     const [dataset] = useDataset();
     const {detailPath, resultCardRenderer} = usePanoptes();
+    const ResultCard = resultCards[dataset];
 
     return (
         <HookedResultsView<PublicationSearchResultItem> useResults={useDeferredSearch} id={resolveId}>
-            {result => resultCardRenderer(result, router.buildLocation({
-                to: detailPath,
-                params: {dataset, id: resolveId(result)}
-            }).href)}
+            {result => {
+                const link = router.buildLocation({
+                    to: detailPath,
+                    params: {dataset, id: resolveId(result)}
+                }).href;
+                return ResultCard ? <ResultCard {...result} link={link}/> : resultCardRenderer(result, link);
+            }}
         </HookedResultsView>
     );
 }

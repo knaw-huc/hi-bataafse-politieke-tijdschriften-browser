@@ -1,7 +1,6 @@
 import {createPanoptesRoot, PanoptesRouterProvider} from '@knaw-huc/panoptes-react';
 import {createTranslate} from "./i18n/i18n.ts";
 import {panoptesBlocksLibrary} from "@knaw-huc/panoptes-react-blocks";
-import PublicationResultsCard, { type PublicationSearchResultItem } from "./components/results/PublicationResultsCard.tsx";
 import LinkSetBlockRenderer from "./blocks/linkset";
 import MarkdownListRenderer from "./blocks/markdown-list";
 import CountedPropertyListRenderer from "./blocks/counted-list";
@@ -35,7 +34,7 @@ if (window.location.pathname === '/') {
     window.location.replace(target);
 }
 
-const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElementById('root')!, {
+const root = createPanoptesRoot(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
     isEmbedded: getVar(panoptesIsEmbedded) === 'true',
     searchPath: getVar(panoptesSearchPath),
@@ -45,8 +44,6 @@ const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElement
     blocks: panoptesBlocksLibrary,
     branding: 'Bataafse Politieke Tijdschriften',
     searchComponent: Search,
-    resultCardRenderer: (result, link) =>
-                                <PublicationResultsCard {...result} link={link}/>,
     navItems: []
 });
 root.render(<PanoptesRouterProvider/>);

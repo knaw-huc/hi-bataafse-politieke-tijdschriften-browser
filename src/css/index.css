@@ -111,3 +111,32 @@ main dl[class*="_list_"] {
     color: #4b5d5a;
     background-color: #ffffff;
 }
+
+
+/* Search facets — the facet value list is capped with max-h-80 overflow-y-auto, but the panoptes-react
+   stylesheet only ships max-h-80. Without the overflow the values spill out of the capped list, so the
+   opening animation grows the panel to the full list height and then snaps back when it is clipped. */
+.overflow-y-auto {
+    overflow-y: auto;
+}
+
+/* Search page — the library sizes the facet column with fit-content, so its width
+   follows the longest visible facet value and jumps when facet values are filtered.
+   Pin it to a fixed width on the side-by-side layout instead. */
+@media (width >= 64rem) {
+    [class*="_search_"] > [class*="_facets_"] {
+        width: 25rem;
+        min-width: 25rem;
+        flex-shrink: 0;
+    }
+}
+
+
+/* Search page — lock the library root to the viewport so the header stays put and only the
+   results column scrolls (see Search.module.css). Side-by-side layout only; stacked layout scrolls the page. */
+@media (width >= 64rem) {
+    div[class*="_root_"]:has(> [class*="_search_"]) {
+        height: 100vh;
+        overflow: hidden;
+    }
+}

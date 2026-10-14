@@ -1,0 +1,299 @@
+.root {
+    /* Political stances, in stack order; validated as an adjacent set (dataviz palette slots 1-4 + neutral). */
+    --stance-1: #2a78d6;
+    --stance-2: #eb6834;
+    --stance-3: #1baf7a;
+    --stance-4: #eda100;
+    --stance-5: #a8a69e;
+
+    --ink: #1d3b44;
+    --ink-secondary: #52514e;
+    --ink-muted: #6b6a65;
+    --gridline: #e1e0d9;
+    --baseline: #c3c2b7;
+
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    color: var(--ink);
+}
+
+.header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.title {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+}
+
+.subtitle {
+    margin: 0.15rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-secondary);
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0.9rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8rem;
+    color: var(--ink-secondary);
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+    }
+}
+
+.swatch {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+.chart {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.5rem;
+    /* Room for the year labels under the plot. */
+    padding-bottom: 1.25rem;
+}
+
+.yAxis {
+    position: relative;
+    height: 10rem;
+    min-width: 1.5rem;
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+
+    span {
+        position: absolute;
+        right: 0;
+        transform: translateY(50%);
+    }
+}
+
+.plot {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    height: 10rem;
+    border-bottom: 1px solid var(--baseline);
+    /* Horizontal drags select years; vertical swipes still scroll the page. */
+    touch-action: pan-y;
+    /* The popover hangs below the year labels, under the hovered bar. */
+    --tooltip-half: 7rem;
+    --tooltip-top: calc(100% + 1.75rem);
+    user-select: none;
+}
+
+.gridline {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px solid var(--gridline);
+    pointer-events: none;
+}
+
+/* The full column is the hit target, not just the painted bar. */
+.bar {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    min-width: 0;
+    padding: 0;
+    background: none;
+    border: 0;
+    cursor: pointer;
+
+    &[data-dimmed="true"] .stack {
+        opacity: 0.35;
+    }
+
+    &:hover .stack,
+    &:focus-visible .stack {
+        filter: brightness(1.1);
+        opacity: 1;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 1px;
+        border-radius: 2px;
+    }
+
+    &[data-in-range="true"]::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-color: rgb(29 59 68 / 6%);
+        border-radius: 4px 4px 0 0;
+        pointer-events: none;
+    }
+}
+
+.stack {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 2px;
+    width: 100%;
+    max-width: 24px;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+}
+
+.segment {
+    flex-basis: 0;
+    min-height: 1px;
+}
+
+.xLabel {
+    position: absolute;
+    top: calc(100% + 0.3rem);
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-muted);
+    white-space: nowrap;
+    pointer-events: none;
+
+    /* Every five years crowds the axis on phones; keep the decades. */
+    @media (width < 40rem) {
+        &[data-minor="true"] {
+            visibility: hidden;
+        }
+    }
+}
+
+.tooltip {
+    position: absolute;
+    top: var(--tooltip-top);
+    z-index: 2;
+    box-sizing: border-box;
+    width: calc(2 * var(--tooltip-half));
+    max-width: 100%;
+    padding: 0.6rem 0.75rem;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgb(0 0 0 / 10%);
+    font-size: 0.8rem;
+    color: var(--ink-secondary);
+    pointer-events: none;
+
+    transform: translateX(-50%);
+
+    strong {
+        color: var(--ink);
+        font-variant-numeric: tabular-nums;
+    }
+
+    ul {
+        margin: 0.4rem 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+}
+
+.tooltipArrow {
+    position: absolute;
+    top: calc(var(--tooltip-top) - 5px);
+    z-index: 3;
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    border-left: 1px solid #e5e7eb;
+    transform: translateX(-50%) rotate(45deg);
+    pointer-events: none;
+}
+
+.rangeLabel {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    padding: 0.2rem 0.5rem;
+    background-color: var(--ink);
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.tooltipHeader strong {
+    font-size: 1rem;
+}
+
+.lineKey {
+    width: 12px;
+    height: 2px;
+    flex-shrink: 0;
+}
+
+.tooltipHint {
+    color: var(--ink-muted);
+}
+
+.note {
+    margin: 0.75rem 0 0;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+}
+
+.tableView {
+    margin-top: 0.75rem;
+    font-size: 0.8rem;
+    /* Long stance names make the table wider than a phone screen. */
+    overflow-x: auto;
+
+    summary {
+        cursor: pointer;
+        color: var(--ink-secondary);
+    }
+
+    table {
+        margin-top: 0.5rem;
+        border-collapse: collapse;
+        font-variant-numeric: tabular-nums;
+    }
+
+    th, td {
+        padding: 0.2rem 0.6rem;
+        border-bottom: 1px solid var(--gridline);
+        text-align: right;
+    }
+
+    thead th {
+        vertical-align: bottom;
+        color: var(--ink-secondary);
+        font-weight: 600;
+    }
+}

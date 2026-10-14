@@ -1,0 +1,51 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    width: 100%;
+    height: 100%;
+    max-width: 1300px; /*var(--site-max-width);*/
+    margin-top: 2rem;
+
+    @media (width >= 64rem) {
+        flex-direction: row;
+
+        /* Scroll container below the fixed header: full width so the scrollbar sits at the
+           window edge, with the content still centered at 1300px via padding. */
+        min-height: 0;
+        max-width: none;
+        overflow-y: auto;
+        margin-top: 0;
+        padding-top: 2rem;
+        padding-inline: max(0px, calc((100% - 1300px) / 2));
+    }
+
+    @media (width >= 80rem) {
+        gap: 2.5rem;
+    }
+}
+
+.facets {
+    width: 100%;
+    padding-inline: 1rem;
+    padding-bottom: 1.5rem;
+    /* On narrow screens the facets open as an absolute overlay without a z-index;
+       keep it above the histogram's positioned bars, tooltip and range label (z-index 1-3). */
+    z-index: 10;
+
+    @media (width >= 64rem) {
+        width: fit-content;
+        min-width: fit-content;
+    }
+}
+
+.results {
+    flex-grow: 1;
+    padding-inline: 1rem;
+    padding-bottom: 5rem;
+}
+
+.title {
+    margin-bottom: 1rem;
+}

@@ -6,6 +6,8 @@ export interface PublicationSearchResultItem {
     description?: string;
     tags?: string[];
     numPublications: string;
+    politiekePositie?: string | null;
+    jarenInOmloop?: number[];
 }
 
 export interface PublicationResultCardProps extends PublicationSearchResultItem {

@@ -1,0 +1,14 @@
+
+import classes from "./Home.module.css";
+
+export default function Home() {
+
+    return (
+        <div className={classes.container}>
+            <h1>Bataafse Politieke Tijdschriften</h1>
+            <p>De zoekinterface 'Bataafse Politieke Tijdschriften' ontsluit de tijdschriften en kranten uit de eerste Nederlandse democratie (1795-1801) die aanwezig zijn in Nederlandse archieven en bibliotheken. Tijdens deze eerste jaren van de Bataafse Republiek werd de persvrijheid wettelijk vastgelegd. De Bataafse revolutionairen waren ervan overtuigd dat het vertegenwoordigend stelsel dat zij voor ogen hadden alleen kon slagen als het werd ondersteund door een volledig een vrije pers. Was het parlement het hoofd, dan was de pers het hart van de democratie dat informatie rondpompte naar alle onderdelen van het politieke lichaam van het land. Zo moest de informatievoorziening aan de burger de vertegenwoordigers in het gareel houden en tevens de mensen onderwijzen die nog onvoldoende waren toegerust om aan de democratie deel te kunnen nemen. De revolutie van 1795 ontketende dan ook een stortvloed aan politiek drukwerk, waarbij met name de periodieke pers (kranten en tijdschriften) een enorme opgang maakten. Honderden verschillende politieke periodieken verschenen tussen 1795 en 1802. Wat nieuw op de markt kwam, was meestal politiek, wat al bestond raakte vaak gepolitiseerd.</p>
+            <p>Met deze zoekinterface kan de eerste onwennige wisselwerking tussen een vertegenwoordigende democratie en pers kan worden bestudeerd. Het is tevens de weerslag van het materiaal dat is gebruikt voor Hartslag van een Revolutie (Verloren 2026), waarin niet alleen de interactie tussen pers en politiek, maar ook het Bataafse perslandschap in kaart wordt gebracht. Deze dataset bevat alle titels van periodieken die tussen 1795 en 1802 op de markt kwamen, maar behandelt alleen de tijdschriften die politiek van aard waren uitvoerig. Dit kunnen couranten zijn, maar ook week- en maandbladen. Een van de aandachtspunten is de omvang van wat vaak is omschreven als 'de volkspers': tijdschriften die zich richtten op lager geschoolde en minder bemiddelde burgers, een groep tijdschriften die in de historiografie meestal is veronachtzaamd, maar die voor onderzoek naar interactie tussen pers, politiek en burger in een parlementaire democratie van vitaal belang is. Ook is er aandacht voor de informatievoorziening: tijdschriften die bedoeld waren om het handelen van de overheid openbaar te maken. De dataset biedt de onderzoeker een ingang naar de vroegste periode van een vrij publiek debat in Nederland.</p>
+            <p>De dataset hoort bij het het boek: Erik Jacobs, <i>Hartslag van een revolutie</i> (Uitgeverij Verloren, Hilversum, 2026), <a href="https://verloren.nl/Webshop/Detail/catid/205/eid/94329/hartslag-van-een-revolutie">ISBN 9789464551686</a></p>
+        </div>
+    );
+}

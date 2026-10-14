@@ -1,0 +1,27 @@
+
+.container {
+    font-family: "Roboto", sans-serif;
+    font-weight: 300;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 40px;
+    padding-inline: 1.5rem;
+}
+
+.container p {
+    max-width: 60rem;
+    margin: 0 auto 1rem;
+}
+
+h1 {
+    font-size: 2em;
+    line-height: 150%;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+.container a {
+    color: #0087d4;
+    text-decoration: none;
+}

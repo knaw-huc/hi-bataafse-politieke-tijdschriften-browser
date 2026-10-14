@@ -1,7 +1,7 @@
 {
   "name": "hi-bataafse-politieke-tijdschriften-browser",
   "private": false,
-  "version": "0.0.9",
+  "version": "0.0.10",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -16,9 +16,11 @@
   "dependencies": {
     "@knaw-huc/panoptes-react": "^0.0.15",
     "@knaw-huc/panoptes-react-blocks": "^0.0.13",
+    "@tanstack/react-query": "^5.90.21",
+    "@tanstack/react-router": "^1.166.6",
     "i18next": "^26.3.3",
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": "19",
+    "react-dom": "19"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

@@ -27,7 +27,28 @@
   "panoptes.no": "Nee",
   "panoptes.mainSiteNavigation": "Hoofdnavigatie",
 
+  "bataafse-politieke-tijdschriften.pages.home": "Home",
+  "bataafse-politieke-tijdschriften.pages.search": "Zoeken",
+
   "searchResults.title": "{{title}} (Aantal afleveringen: {{numPublications}})",
+
+  "histogram.title": "Tijdschriften in druk per jaar",
+  "histogram.subtitle": "Klik op een jaar of sleep over een periode om te filteren. Shift-klik breidt de selectie uit.",
+  "histogram.stance.unknown": "Onbekend / niet vastgesteld",
+  "histogram.bar.aria": "{{year}}: {{count}} tijdschriften in druk",
+  "histogram.tooltip.total": "tijdschriften in druk in {{year}}",
+  "histogram.tooltip.select": "Klik om op dit jaar te filteren, of sleep voor een periode",
+  "histogram.tooltip.clear": "Klik om het jaarfilter te wissen",
+  "histogram.undated_one": "{{count}} tijdschrift zonder bekende jaren in omloop wordt niet getoond.",
+  "histogram.undated_other": "{{count}} tijdschriften zonder bekende jaren in omloop worden niet getoond.",
+  "histogram.outside_one": "{{count}} tijdschrift verscheen alleen buiten {{start}}–{{end}}.",
+  "histogram.outside_other": "{{count}} tijdschriften verschenen alleen buiten {{start}}–{{end}}.",
+  "histogram.range_one": "{{period}}: {{count}} tijdschrift",
+  "histogram.range_other": "{{period}}: {{count}} tijdschriften",
+  "histogram.error": "Het histogram kon niet worden geladen.",
+  "histogram.table.toggle": "Toon als tabel",
+  "histogram.table.year": "Jaar",
+  "histogram.table.total": "Totaal",
 
   "screens.tijdschrift-detail": "Tijdschriftgegevens",
   "screens.tijdschrift-detail.titel": "Titel",
@@ -185,5 +206,10 @@
   "screens.personen-detail.persoon.tweedeBeroep": "Tweede beroep",
   "screens.personen-detail.persoon.tweedeBeroep.info": "",
   "screens.personen-detail.persoon.derdeBeroep": "Derde beroep",
-  "screens.personen-detail.persoon.derdeBeroep.info": ""
+  "screens.personen-detail.persoon.derdeBeroep.info": "",
+  "screens.personen-detail.persoon.wikidataId": "Wikidata ID",
+  "screens.personen-detail.persoon.wikidataId.info": "",
+  "screens.personen-detail.persoon.viaf": "VIAF",
+  "screens.personen-detail.persoon.viaf.info": ""
+
 }

@@ -6,6 +6,7 @@ import LinkSetBlockRenderer from "./blocks/linkset";
 import MarkdownListRenderer from "./blocks/markdown-list";
 import CountedPropertyListRenderer from "./blocks/counted-list";
 import SearchLinkBlockRenderer from "./blocks/search-link";
+import Search from "./components/search/Search.tsx";
 import '@knaw-huc/panoptes-react/style.css';
 import '@knaw-huc/panoptes-react-blocks/style.css';
 import './css/theme.css';
@@ -22,17 +23,17 @@ const getVar = (envVariable: string): string | undefined =>
         ? (envVariable.slice(1) in import.meta.env ? import.meta.env[envVariable.slice(1)] : undefined)
         : envVariable;
 
+panoptesBlocksLibrary.set('external-link-set', LinkSetBlockRenderer);
+panoptesBlocksLibrary.set('markdown-list', MarkdownListRenderer);
+panoptesBlocksLibrary.set('counted-list', CountedPropertyListRenderer);
+panoptesBlocksLibrary.set('search-link', SearchLinkBlockRenderer);
+
 if (window.location.pathname === '/') {
     const dataset = getVar(panoptesDataset);
     const searchPath = getVar(panoptesSearchPath);
     const target = searchPath?.replace('$dataset', dataset ?? '') ?? `/${dataset}/search`;
     window.location.replace(target);
 }
-
-panoptesBlocksLibrary.set('external-link-set', LinkSetBlockRenderer);
-panoptesBlocksLibrary.set('markdown-list', MarkdownListRenderer);
-panoptesBlocksLibrary.set('counted-list', CountedPropertyListRenderer);
-panoptesBlocksLibrary.set('search-link', SearchLinkBlockRenderer);
 
 const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElementById('root')!, {
     url: getVar(panoptesUrl),
@@ -43,6 +44,7 @@ const root = createPanoptesRoot<PublicationSearchResultItem>(document.getElement
     theme: 'huygens',
     blocks: panoptesBlocksLibrary,
     branding: 'Bataafse Politieke Tijdschriften',
+    searchComponent: Search,
     resultCardRenderer: (result, link) =>
                                 <PublicationResultsCard {...result} link={link}/>,
     navItems: []
